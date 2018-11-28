@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>类目商品量设置</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/temp_base.css"/>
+		<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+	</head>
+<body>
+	<div class="temp-base">
+		<div class="content">
+		<div><label>当前位置-展示数据修改-类目商品量设置</label></div>
+		<div class="add_temp">
+           <span class="btn_sm_blue1" onclick="addsdu();">新增类目商品</span>
+        </div>
+        <div class="tempList" style="margin-top: 30px;">
+            <table>
+                <tr>
+                    <th>序号</th>
+                    <th>类目名</th>
+                    <th>商品量</th>
+                    <th>操作</th>
+                </tr>
+                
+                <tr th:each="sdu,sduStat : ${sdu}">
+						<td th:text="${sduStat.count}"></td> 
+						<td th:text="${sdu.name}"></td>
+						<td>
+						<span th:text="${sdu.number}"></span></td>
+						<td style="width: 600px;">
+							<div>
+								<span class="btn_sm_blue1" th:onclick="'javascript:updatesdu('+${sduStat.count}+');'">修改数据</span>
+								<span class="btn_sm_blue1" th:onclick="'javascript:deletesdu('+${sduStat.count}+');'">删除数据</span>
+							</div>
+						</td>
+				</tr>
+            </table>
+            <div id="popupFormDiv" style="display:none;"></div>
+        </div>
+		</div>
+		</div>
+		<script src="../js/jquery.min.js"></script>
+   		<script src="../js/layui/layui.js"></script>
+    	<script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+    	<script src="../js/plugins/datapicker/bootstrap-datepicker.js"></script>
+    	<script th:inline="javascript">
+	    	var flag = [[${flag}]];
+	        $(document).ready(function () {
+	            if(flag!=null){
+	                swal({
+	                     title : "提示",
+	                     text : flag
+	                });
+	            }
+	        });
+	        
+    	</script>
+	 <script type="text/javascript">
+	 	//新增信息
+	 	function addsdu(){
+	 		layer.open({
+	  			type: 2,
+	            title: '新增数据',
+	            skin: 'layui-layer-molv',
+	            shadeClose: true,
+	            area: ['600px', '700px'],
+	            content: ['/addNvc.action','no'],
+				end : function() {
+					// 如果是通过单击关闭按钮关闭弹出层，父画面没有此表单
+					if ($("#popupFormDiv").length === 1) {
+						$("#popupFormDiv").submit();
+					}
+					location.reload();
+				}
+	  		});
+	 	}
+	 
+		//修改数据
+		function updatesdu(id) {
+			layer.open({
+	  			type: 2,
+	            title: '修改数据',
+	            skin: 'layui-layer-molv',
+	            shadeClose: true,
+	            area: ['600px', '700px'],
+	            content: ['/editNvc.action?id=' + id,'no'],
+				end : function() {
+					// 如果是通过单击关闭按钮关闭弹出层，父画面没有此表单
+					if ($("#popupFormDiv").length === 1) {
+						$("#popupFormDiv").submit();
+					}
+					location.reload();
+				}
+	  		});
+		}
+		
+		//删除数据
+		function deletesdu(id) {
+			window.location.href="/deleteNvc.aciton?id="+id;
+		}
+		
+		layui.use(["form", "laydate"], function () {
+			var form = layui.form;
+			var laydate = layui.laydate;
+
+			$(".laydate_time").each(function () {
+				laydate.render({
+					elem: this
+				});
+			});
+		})
+	</script>
+	</body>
+</html>

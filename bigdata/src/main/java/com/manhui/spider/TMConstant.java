@@ -1,0 +1,12 @@
+package com.manhui.spider;
+
+public class TMConstant {
+	final static public String TM_COMMENT_URL="search.htm";
+	final static public String TM_COMMENT_VALUE="_ksTS=1521526944334_120&callback=jsonp121&mid=w-13453021504-0&wid=13453021504&path=/search.htm&spm=a1z10.3-b.w4011-13453021504.271.RJ2Ur2&search=y&orderType=hotsell_desc&tsearch=y&pageNo=";
+	final static public String TM_COMMENT_COOKIE="hng=CN%7Czh-CN%7CCNY%7C156; uss=UIWtxXJEVQFe4zhpVOFDqwDEHIt5WXjRABq0Vci%2FA0%2B8rJXzaJk8%2B73F3w%3D%3D; cna=DdkvE+kmr1sCAXH4kph8J4HQ; otherx=e%3D1%26p%3D*%26s%3D0%26c%3D0%26f%3D0%26g%3D0%26t%3D0; t=2a7e8f3e1b1592de3ee973ed984b37c2; uc3=vt3=F8dBz4W%2F99PU9iXBsuo%3D&id2=UNaE%2BX%2F2uosT&nk2=okfp6Bje&lg2=UIHiLt3xD8xYTw%3D%3D&sg2=Vy%2BaR%2BZj7cw0tDX3wkIsLRErC3ky2yyDayRsQqDVjbw%3D; tracknick=%5Cu604B%5Cu96EA%5Cu6797; lgc=%5Cu604B%5Cu96EA%5Cu6797; _tb_token_=fb3a415578f5c; cookie2=1fa11058eafb96e2d4beb4e7f359f061; _m_h5_tk=d1b8dbfb711e20a91d3b1e2186a455bb_1521541940566; _m_h5_tk_enc=fb0ded7129b7abd292de9b938311fdd9; sm4=500100; enc=TmXjvorl5gnbVSSBgERVjLls%2Bi9hpE0yLsMTJp%2B9qbjsZ03V2T273pK0fyKQL72W92n3fF%2B0i2ofehXuOrbe8Q%3D%3D; pnm_cku822=; cq=ccp%3D1; swfstore=75885; isg=BC8v8ztSqRbXg60z00MGOlrGvkP5fIOz5nYyvUG8yx6lkE-SSaQTRi1GFoCu81tu";
+
+	final static public String TM_SHOP_URL="https://list.tmall.com/search_product.htm";
+	final static public String TM_SHOP_VALUE="spm=spm=a220m.1000858.0.0.68c64e05A6xnaX&q=%B3%C7%BF%DA&sort=s&style=g&from=.shop.pc_1_searchbutton&type=pc&s=";
+	final static public String TM_SHOP_COOKIE=" isg=BMXFNdVFM_RKdxc3J54ef0H71wE_KnlREf58DccqhfwLXuXQj9KJ5FM0bAKoBZHM; cna=oy4xE2/g4C0CAXH4kBGuUJY1; _m_h5_tk=48954c187c7554cb27719f4493d1c857_1521424475893; _m_h5_tk_enc=a0bf5dbf53740a85bc0ef19b2ae4e8c6; enc=Sc7NYy03rx5VSI1%2FvgyONWEHHMtXfZuTdZB3aickp4bRcOWISbFE4MSqJRuWJTKkoMSqflxABeJ1QeRAub6i2Q%3D%3D; _med=dw:1920&dh:1080&pw:1920&ph:1080&ist:0; pnm_cku822=098%23E1hvkQvUvbpvUvCkvvvvvjiPPFzZ1jYjnLqwsjD2PmP9sjlRRLd9gjiWRL59Aj1biQhvChCvCCpPvpvhvv2MMqyCvm3vpvvvvvCvphCvHVpvvhPOphvwv9vvBj1vpCQmvvChxhCvjhUvvhByuphvmhCvCUe9bOlEkphvCyn2mvo45vyCvh1vJwUvIqp6jVEvibmAdcWKNB3rQ8gcWDw0ZG5n%2B3BiBox%2FQj7J%2B3%2BIjLRiSfpz4hikoqmxdByaUmi1D76Od36l4Z7DYEkXwh3scYeYvphvCyCCvvvvv2yCvvBvpvvv; cq=ccp%3D1; um=0712F33290AB8A6D528A763CC4FD30C0A06E868902E31B108E195144D3B21E5535D29D1F344852EECD43AD3E795C914C7878E2FF46B54F64E75ABA76D705EE70; t=6f2bf9334f1c6b50824367f4b059484a; _tb_token_=f75333be4bb37; cookie2=11a2b37cfc32ff5a8412d368fb6f1d5c; res=scroll%3A1288*5363-client%3A1288*923-offset%3A1288*5363-screen%3A1920*1080";
+
+}

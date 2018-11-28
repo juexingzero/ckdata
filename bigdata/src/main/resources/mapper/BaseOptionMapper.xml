@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.BaseOptionService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.BaseOption">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="tablename" jdbcType="VARCHAR" property="tablename" />
+    <result column="columname" jdbcType="VARCHAR" property="columname" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sortid" jdbcType="INTEGER" property="sortid" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, tablename, columname, code, name, sortid, state, remark
+  </sql>
+  
+  <select id="findAllBaseOption" parameterType="com.manhui.model.BaseOption" resultMap="BaseResultMap">
+  	  select <include refid="Base_Column_List"></include> from bg_base_option
+  	  where tablename=#{tablename,jdbcType=VARCHAR} and columname=#{columname,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="findSortByBaseOption" parameterType="com.manhui.model.BaseOption" resultType="java.lang.Integer">
+  	select Max(sortid) from bg_base_option where 
+  	tablename=#{tablename,jdbcType=VARCHAR} and columname=#{columname,jdbcType=VARCHAR}
+  </select>
+  
+  <insert id="insertBaseOptions" parameterType="com.manhui.model.BaseOption">
+  	insert into bg_base_option 
+  	<trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tablename != null">
+        tablename,
+      </if>
+      <if test="columname != null">
+        columname,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sortid != null">
+        sortid,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+     <if test="tablename != null">
+        #{tablename,jdbcType=VARCHAR},
+      </if>
+      <if test="columname != null">
+       #{columname,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+       #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+       #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sortid != null">
+       #{sortid,jdbcType=INTEGER},
+      </if>
+       <if test="state != null">
+       #{state,jdbcType=INTEGER},
+      </if>
+       <if test="remark != null">
+       #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteBaseOptions" parameterType="java.lang.Integer">
+  	delete from bg_base_option where id=#{id,jdbcType=INTEGER}
+  </delete>
+</mapper>

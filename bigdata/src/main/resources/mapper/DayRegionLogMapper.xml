@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.DayRegionLogService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.DayRegionLog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="region_id" jdbcType="INTEGER" property="regionId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="region_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+    <result column="per_amount" jdbcType="DECIMAL" property="perAmount" />
+  </resultMap>
+  
+  <resultMap id="BaseResult" type="com.manhui.model.DayRegionLog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="region_id" jdbcType="INTEGER" property="regionId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="region_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+    <result column="per_amount" jdbcType="DECIMAL" property="perAmount" />
+     <association property="baseRegion" javaType="com.manhui.model.BaseRegion">
+     <result column="name" property="name" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, add_time, region_id, order_id, region_num, total_amount, per_amount
+  </sql>
+  
+  <select id="findDayRegionLog" resultMap="BaseResult">
+	select a.total_amount,b.name from bg_day_region_log a INNER JOIN bg_base_region b on a.region_id=b.id	
+  	where a.buy_region=0 order by a.total_amount desc limit 7
+  </select>
+  
+  <select id="findDayRegionLogByo" resultMap="BaseResult">
+  	select a.order_num,b.name from bg_day_region_log a INNER JOIN bg_base_region b on a.region_id=b.id	
+  	where a.buy_region=1 order by a.total_amount desc 
+  </select>
+  
+  <insert id="insertDayRegionLog" parameterType="com.manhui.model.DayRegionLog">
+  	insert into bg_day_region_log 
+  	<trim prefix="(" suffix=")" suffixOverrides=",">
+	 	<if test="id != null">
+	       id,
+	     </if>
+	     <if test="addTime != null">
+	       add_time,
+	     </if>
+	     <if test="regionId != null">
+	       region_id,
+	     </if>
+	     <if test="orderId != null">
+	       order_id,
+	     </if>
+	      <if test="orderNum != null">
+	       order_num,
+	     </if>
+	      <if test="totalAmount != null">
+	       total_amount,
+	     </if>
+	      <if test="perAmount != null">
+	       per_amount,
+	     </if>
+	   </trim> 
+	   <trim prefix="values (" suffix=")" suffixOverrides=",">
+	     <if test="id != null">
+	       #{id,jdbcType=INTEGER},
+	     </if>
+	    <if test="addTime != null">
+	       #{addTime,jdbcType=TIMESTAMP},
+	     </if>
+	     <if test="regionId != null">
+	      #{regionId,jdbcType=INTEGER},
+	     </if>
+	     <if test="orderId != null">
+	      #{orderId,jdbcType=INTEGER},
+	     </if>
+	     <if test="orderNum != null">
+	      #{orderNum,jdbcType=INTEGER},
+	     </if>
+	     <if test="totalAmount != null">
+	      #{totalAmount,jdbcType=DECIMAL},
+	     </if>
+	     <if test="perAmount != null">
+	      #{perAmount,jdbcType=DECIMAL},
+	     </if>
+	   </trim>
+  </insert>
+</mapper>

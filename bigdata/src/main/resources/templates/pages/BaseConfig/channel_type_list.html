@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title>采集方式数据管理</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/temp_base.css"/>
+		<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+</head>
+<body>
+	<div class="temp-base">
+		<div class="content">
+			<div><label>当前位置-基础信息配置-采集方式数据</label></div>
+			<div class="add_temp">
+            	<span class="btn_sm_blue1" onclick="add_channel_type();">新增采集方式</span>
+        	</div>
+			<div class="tempList" style="margin-top: 30px;">
+				 <table>
+				 	<tr>
+					 	<th>序号</th>
+					 	<th>采集方式名称</th>
+					 	<th>备注</th>
+					 	<th>状态</th>
+					 	<th>操作</th>
+				 	</tr>
+				 	<tr th:each="bo,userStat : ${bo}">
+				 		<td th:text="${userStat.count}"></td> 
+						<td th:text="${bo.name}"></td>
+						<td th:text="${bo.remark}"></td>
+						<td><span th:if="${bo.state} == 0">停用</span>
+						<span th:if="${bo.state} == 1">启用</span> </td>
+						<td style="width: 600px;">
+							<div>
+								<span class="btn_sm_blue1" th:onclick="'javascript:delete_channel_type('+${bo.id}+');'">删除</span> 
+							</div>
+						</td>
+				 	</tr>
+				 </table>
+			</div>
+		</div>
+	</div>
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/layui/layui.js"></script>
+   	<script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+   	<script src="../js/plugins/datapicker/bootstrap-datepicker.js"></script>
+   	<script type="text/javascript">
+   	var flag = [[${flag}]];
+    $(document).ready(function () {
+        if(flag!=null){
+            swal({
+                 title : "提示",
+                 text : flag
+            });
+        }
+    });
+    
+   	</script>
+   	
+   	<script type="text/javascript">
+	layui.use([ "form", "laydate", "layer", "laypage" ],
+	function() {
+		var form = layui.form;
+		var laydate = layui.laydate;
+		var layer = layui.layer;
+		var laypage = layui.laypage;
+		
+		$(".laydate_time").each(function() {
+			laydate.render({elem : this
+				});
+		});
+	})
+   	</script>
+   	
+   	<script type="text/javascript">
+    //新增采集方式
+	function add_channel_type() {
+    	layer.open({
+			type : 2,
+			title : '新增采集方式',
+			skin : 'layui-layer-molv',
+			shadeClose : true,
+			shade: 0.3,
+			maxmin : false, //关闭最大化最小化按钮
+			area : ['800px', '700px'],
+			content : [ '/to_add_channel_type','no'],
+			end : function() {
+				// 如果是通过单击关闭按钮关闭弹出层，父画面没有此表单
+				if ($("#popupFormDiv").length === 1) {
+					$("#popupFormDiv").submit();
+				}
+				location.reload();
+			}
+		});
+	}
+    
+    //删除商品行业
+	function delete_channel_type(id){
+		layer.confirm('你确定要删除此采集方式数据么？', {
+		  btn: ['确定','取消'] //按钮
+		}, function(){
+			window.location.href="/delete_channel_type?id="+id;
+		}, function(){
+			layer.close();
+		});
+	}
+   	</script>
+</body>
+</html>

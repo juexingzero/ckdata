@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.service.OrderExpressLogService" >
+  <resultMap id="BaseResultMap" type="com.manhui.model.OrderExpressLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="express_id" property="expressId" jdbcType="INTEGER" />
+    <result column="express_num" property="expressNum" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap id="BaseResult" type="com.manhui.model.OrderExpressLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="express_id" property="expressId" jdbcType="INTEGER" />
+    <result column="express_num" property="expressNum" jdbcType="INTEGER" />
+    <association property="express" javaType="com.manhui.model.Express">
+     <result column="name" jdbcType="VARCHAR" property="name" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, add_time, express_id, express_num
+  </sql>
+  
+  <select id="findOrderEL" parameterType="java.lang.String" resultMap="BaseResult">
+  	select a.*,b.name from bg_order_express_log a,bg_express b 
+  	where a.express_id=b.id and add_time like #{0}
+  </select>
+  
+  <select id="findOrderExpressNum" resultMap="BaseResult">
+  	select b.name,sum(a.express_num) as express_num from bg_order_express_log a INNER JOIN bg_express b
+	on a.express_id=b.id
+  	group by express_id
+  </select>
+  
+	<insert id="insertOrderExpress" parameterType="com.manhui.model.OrderExpressLog">
+		insert into bg_order_express_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	 	<if test="id != null">
+	       id,
+	     </if>
+	     <if test="addTime != null">
+	       add_time,
+	     </if>
+	     <if test="expressId != null">
+	       express_id,
+	     </if>
+	     <if test="expressNum != null">
+	       express_num,
+	     </if>
+	   </trim> 
+	   <trim prefix="values (" suffix=")" suffixOverrides=",">
+	     <if test="id != null">
+	       #{id,jdbcType=INTEGER},
+	     </if>
+	    <if test="addTime != null">
+	       #{addTime,jdbcType=TIMESTAMP},
+	     </if>
+	     <if test="expressId != null">
+	      #{expressId,jdbcType=INTEGER},
+	     </if>
+	     <if test="expressNum != null">
+	      #{expressNum,jdbcType=INTEGER},
+	     </if>
+	   </trim>
+	</insert>
+</mapper>

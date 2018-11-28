@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.service.DayBusinessLogService" >
+  <resultMap id="BaseResultMap" type="com.manhui.model.DayBusinessLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="business_id" property="businessId" jdbcType="INTEGER" />
+    <result column="shop_num" property="shopNum" jdbcType="INTEGER" />
+    <result column="article_num" property="articleNum" jdbcType="INTEGER" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="deal_article_num" property="dealArticleNum" jdbcType="INTEGER" />
+    <result column="deal_shop_num" property="dealShopNum" jdbcType="INTEGER" />
+    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="per_amount" property="perAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <resultMap id="BaseResult" type="com.manhui.model.DayBusinessLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="business_id" property="businessId" jdbcType="INTEGER" />
+    <result column="shop_num" property="shopNum" jdbcType="INTEGER" />
+    <result column="article_num" property="articleNum" jdbcType="INTEGER" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="deal_article_num" property="dealArticleNum" jdbcType="INTEGER" />
+    <result column="deal_shop_num" property="dealShopNum" jdbcType="INTEGER" />
+    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="per_amount" property="perAmount" jdbcType="DECIMAL" />
+    <association property="category" javaType="com.manhui.model.Category">
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, add_time, business_id, shop_num, article_num, order_num, deal_article_num, deal_shop_num, 
+    total_amount, per_amount
+  </sql>
+  
+  <select id="findDayBL" parameterType="java.lang.String" resultMap="BaseResult">
+  	select a.*,b.name from bg_day_business_log a,bg_category b 
+  	where a.business_id=b.id and add_time like #{0}
+  </select>
+  
+  <select id="findAmount" resultMap="BaseResult">
+  	select SUM(total_amount) as total_amount,SUM(per_amount) as per_amount from bg_day_business_log
+  </select>
+</mapper>

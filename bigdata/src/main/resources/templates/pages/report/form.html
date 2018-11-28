@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Insert title here</title>
+</head>
+<body>
+	<form action="/report/chklogin">
+	<img alt="验证码" src="/report/verify"/>
+	<br/>
+	<input id="verify" name="verify"/>
+	<input type="button" value="登陆" onclick="up()"/>
+	<input type="button" value="提交数据" onclick="saveReportInfo();"/>
+	<br/>
+	<input id="date" type="date"/>
+	<input type="button" value="按日期查询" onclick="getByDate();"/>
+	</form>
+</body>
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/report/form.js"></script>
+</html>

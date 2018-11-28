@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.service.ArticleService" >
+  <resultMap id="BaseResultMap" type="com.manhui.model.Article" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="article_nid" property="articleNid" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="quantity" property="quantity" jdbcType="DECIMAL" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, title, article_nid, url, img_url, quantity, price, shop_id, category_id, state
+  </sql>
+  <select id="getArticleList" parameterType="com.manhui.model.Article" resultMap="BaseResultMap">
+     select <include refid="Base_Column_List"></include>
+     from bg_article a where 
+     a.state = 1 
+     <if test="title != null">
+     AND
+     a.title like #{title}
+    </if>
+  </select>
+  <select id="getPageArticle" parameterType="com.manhui.model.Article" resultMap="BaseResultMap">
+     select 
+     <include refid="Base_Column_List"></include>
+     from bg_article a
+      where 
+     a.state = 1
+     <if test="title != null">
+     AND
+     a.title = #{title}
+    </if>
+      ORDER BY
+     a.id
+   LIMIT #{start},#{end}
+  </select>
+  <insert id="insertArticle">
+    insert into bg_article
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="articleNid != null">
+        article_nid,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="imgUrl != null">
+        img_url,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="categoryId != null">
+        category_id,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="articleNid != null">
+        #{articleNid,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null">
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+     select <include refid="Base_Column_List"></include>
+     from bg_article
+     where id = #{id}
+  </select>
+  <update id="updateArticle" parameterType="com.manhui.model.Article">
+    update bg_article
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null">
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null">
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=TINYINT},
+      </if>
+    </set>
+		<where>
+			<choose>
+				<when test="articleNid != null">
+					article_nid = #{articleNid,jdbcType=VARCHAR}
+				</when>
+				<otherwise>
+					id = #{id,jdbcType=INTEGER}
+				</otherwise>
+			</choose>
+		</where>
+  </update>
+  <update id="deleteArticle" parameterType="com.manhui.model.Article">
+     update bg_article
+     <set>
+      <if test="state != null">
+        state = #{state,jdbcType=TINYINT},
+      </if>
+     </set>
+     where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getCountByNid" parameterType="string" resultType="int">
+  	select count(*) from bg_article where article_nid = #{id}
+  </select>
+  
+  <select id="getAllArticle" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_article
+  	where state = 1
+  </select>
+  
+  <select id="getArticleCount" resultType="java.lang.Integer">
+  	select count(id) from bg_article where state = 1
+  </select>
+  
+  <select id="getAllTotalAmount" resultMap="BaseResultMap">
+  	select SUM(price) as price,SUM(quantity) as quantity from 
+  	bg_article where state = 1
+  </select>
+  
+  <select id="findGodosNumByShopId" resultType="java.lang.Integer">
+  	select count(*) from bg_article where shop_id=#{0}
+  </select>
+  
+  <select id="findArticle" resultMap="BaseResultMap">
+  	select * from bg_article where title like #{arg0} limit #{arg1},10
+  </select>
+</mapper>

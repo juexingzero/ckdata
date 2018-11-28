@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.DayShopLogService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.DayShopLog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="shop_id" jdbcType="INTEGER" property="shopId" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+    <result column="per_amount" jdbcType="DECIMAL" property="perAmount" />
+  </resultMap>
+  
+  <resultMap id="BaseResult" type="com.manhui.model.DayShopLog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="shop_id" jdbcType="INTEGER" property="shopId" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+    <result column="per_amount" jdbcType="DECIMAL" property="perAmount" />
+     <association property="shop" javaType="com.manhui.model.Shop">
+     <result column="name" property="name" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, add_time, shop_id, order_num, total_amount, per_amount
+  </sql>
+  
+  <select id="findDayShopLogSortBytotalAmount" resultMap="BaseResult">
+  	select a.total_amount,b.name from bg_day_shop_log a INNER JOIN bg_shop b on a.shop_id=b.id
+  	order by a.total_amount desc limit 7
+  </select>
+  
+  <insert id="insertDayShopLog" parameterType="com.manhui.model.DayShopLog">
+  	insert into bg_day_shop_log 
+  	<trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="orderNum != null">
+        order_num,
+      </if>
+      <if test="totalAmount != null">
+        total_amount,
+      </if>
+       <if test="perAmount != null">
+        per_amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+     <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shopId != null">
+       #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNum != null">
+       #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="totalAmount != null">
+       #{totalAmount,jdbcType=DECIMAL},
+      </if>
+       <if test="perAmount != null">
+       #{perAmount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+</mapper>

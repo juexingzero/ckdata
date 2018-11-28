@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>首页</title>
+
+    <link rel="shortcut icon" href="favicon.ico"/> 
+    <link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet"/>
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet"/>
+    <link href="../css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet"/>
+    <link href="../js/plugins/gritter/jquery.gritter.css" rel="stylesheet"/>
+    <link href="../css/animate.min.css" rel="stylesheet"/>
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet"/>
+</head>
+<!--
+	作者：Jiayan He 
+	时间：2017-10-09
+	描述：首页
+-->
+<body class="gray-bg" >
+    <div class="wrapper wrapper-content" >
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-success pull-right">月</span>
+                        <h5>收入</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins"><span th:text="${dashboard.monthSally}"></span></h1>
+                        <small>总收入</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-success pull-right">月</span>
+                        <h5>订单</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins"><span th:text="${dashboard.monthOrderNum}"></span></h1>
+                        <small>新订单</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-primary pull-right">全部</span>
+                        <h5>店铺</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins"><span th:text="${dashboard.shopCount}"></span></h1>
+                        <small>全部店铺</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right">最近一个月</span>
+                        <h5>商品</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins"><span th:text="${dashboard.articleNum}"></span></h1>
+                        <small><span th:text="${dashboard.month}"></span>月</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>订单</h5>
+                        <div class="pull-right">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-xs btn-white active" onclick="daySum();">天</button>
+                                <button type="button" class="btn btn-xs btn-white" onclick="monthSum();">月</button>
+                                <button type="button" class="btn btn-xs btn-white" onclick="yearSum();">年</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-9">
+                                <div class="flot-chart">
+                                    <div class="flot-chart-content" id="flot-dashboard-chart"></div>
+                                    <input type="hidden" id="month" th:value="${dashboard.month}"/>
+                                    <input type="hidden" id="year" th:value="${dashboard.year}"/>
+                                    <input type="hidden" id="orderNum" th:value="${dashboard.orderNum}"/>
+                                    <input type="hidden" id="orderMoney" th:value="${dashboard.orderMoney}"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <ul class="stat-list">
+                                    <li>
+                                        <h2 class="no-margins"><span id="ordernum" th:text="${dashboard.dayInfo[0]}"></span></h2>
+                                        <small>订单总数</small>
+                                    </li>
+                                    <li>
+                                        <h2 class="no-margins "><span id="ordermon" th:text="${dashboard.dayInfo[1]}"></span></h2>
+                                        <small>交易总额</small>
+                                    </li>
+                                    <li>
+                                        <h2 class="no-margins "><span id="artnum" th:text="${dashboard.dayInfo[2]}"></span></h2>
+                                        <small>商品总数</small>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>消息</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content ibox-heading">
+                        <h3><i class="fa fa-truck"></i> 最新交易商品</h3>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="feed-activity-list">
+
+                            <div class="feed-element" th:each="art,artStat:${dashboard.artList}">
+                                <div>
+                                    <small class="pull-right text-navy">最新</small>
+                                    <strong></strong>
+                                    <div><img alt="" th:src="${art.imgUrl}"/><span th:text="${art.title}"></span></div>
+                                </div>
+                            </div> 
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-8">
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>最新物流信息</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+                                <table class="table table-hover no-margins">
+                                    <thead>
+                                        <tr>
+                                            <th>状态</th>
+                                            <th>物流</th>
+                                            <th>物流编码</th>
+                                            <th>配送费用</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody th:if="${dashboard.expressList} != null">
+                                        <tr th:each="express,expressStat:${dashboard.expressList}">
+                                            <td><small>
+                                            <span th:if="${express.state} == 1">启用</span>
+                                            <span th:if="${express.state} == 0">禁用</span>
+											</small></td>
+                                            <td><i class="fa fa-clock-o"></i><span th:text="${express.name}"></span> </td>
+                                            <td><span th:text="${express.expressCode}"></span></td>
+                                            <td class="text-navy"> <i class="fa fa-level-up"></i> <span th:text="${express.expressFee}"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>数据采集任务</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="ibox-content" th:if="${dashboard.channelList} != null">
+                                <ul class="todo-list m-t small-list ui-sortable" th:each="autoTask,autoTaskStat:${dashboard.autoTaskList}">
+                                    <li>
+                                        <a href="#"></a>
+                                        <span class="m-l-xs" th:if="${autoTask} != null" th:text="${autoTask.taskName}"></span>
+                                        <small class="label label-primary"><i class="fa fa-clock-o" th:if="${autoTask} != null"></i>
+                                        <span class="m-l-xs"  th:if="${autoTask.state} == 0" >禁用</span>
+                                        <span class="m-l-xs"  th:if="${autoTask.state} == 1" >未执行</span>
+                                        <span class="m-l-xs"  th:if="${autoTask.state} == 2" >执行中</span>
+                                        <span class="m-l-xs"  th:if="${autoTask.state} == 3" >执行完成</span>
+                                        </small>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>地区分布信息</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <table class="table table-hover margin bottom">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">序号</th>
+                                                    <th>地区名</th>
+                                                    <th class="text-center">地区全名</th>
+                                                    <th class="text-center">经度</th>
+                                                    <th class="text-center">纬度</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody th:if="${dashboard.regionList} != null">
+                                                <tr th:each="region,regionStat:${dashboard.regionList}">
+                                                    <td class="text-center" th:text="${regionStat.count}"></td>
+                                                    <td th:text="${region.name}"></td>
+                                                    <td class="text-center small" th:text="${region.fullname}"></td>
+                                                    <td class="text-center"><span class="label label-primary" th:text="${region.lng}"></span></td>
+                                                    <td class="text-center"><span class="label label-primary" th:text="${region.lat}"></span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div id="world-map" style="height: 300px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery.min.js?v=2.1.4"></script>
+    <script src="js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="js/plugins/flot/jquery.flot.js"></script>
+    <script src="js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="js/plugins/flot/jquery.flot.spline.js"></script>
+    <script src="js/plugins/flot/jquery.flot.resize.js"></script>
+    <script src="js/plugins/flot/jquery.flot.pie.js"></script>
+    <script src="js/plugins/flot/jquery.flot.symbol.js"></script>
+    <script src="js/plugins/peity/jquery.peity.min.js"></script>
+    <script src="js/demo/peity-demo.min.js"></script>
+    <script src="js/content.min.js?v=1.0.0"></script>
+    <script src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="js/plugins/easypiechart/jquery.easypiechart.js"></script>
+    <script src="js/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <script src="js/demo/sparkline-demo.min.js"></script>
+    <script>
+    /*<![CDATA[*/
+        $(document).ready(function(){
+        	var month = $("#month").val();
+        	var year = $("#year").val();
+        	var orderNum = $("#orderNum").val();
+        	var orderMoney = $("#orderMoney").val();
+	        $(".chart").easyPieChart({barColor:"#f8ac59",scaleLength:5,lineWidth:4,size:80});
+	        $(".chart2").easyPieChart({barColor:"#1c84c6",scaleLength:5,lineWidth:4,size:80});
+	        /* var data2 = "[";
+        	var orderNums = orderNum.split("gd");
+        	var orderNumse = "";
+        	for(var j=1; j<orderNums.length; j++){
+        		orderNumse = orderNums[j].split(",");
+	        	console.log(orderNumse);
+	        	
+	        	for(var i=01;i<=31;i++){
+	        		if(i == orderNumse[2].substr(0,2)){
+	        			var nums = "";
+	        			if(orderNumse[3].indexOf("]") == 0){
+	        				nums = orderNumse[3].substr(0,orderNumse[3].length-1);
+	        			}else{
+	        				nums = orderNumse[3];
+	        			}
+	        			data2 = data2 + "[gd("+year+","+month+","+orderNumse[2].substr(0,2)+"),"+nums+"]";
+	        		}else{
+	        			data2 = data2 + "[gd("+year+","+month+","+i+"),0]";
+	        		}
+	        		data2 = data2 + ",";
+	        		if(i == 31){
+	        			data2 = data2.substr(0,data2.length-1);
+	        		}
+	        	} 
+        	}
+        	
+        	 data2 = data2 + "]";
+        	 alert(data2); */
+        	
+	        var data2=[[gd(2012,1,1),7],[gd(2012,1,2),6],[gd(2012,1,3),4],[gd(2012,1,4),8],[gd(2012,1,5),9],[gd(2012,1,6),7],[gd(2012,1,7),5],[gd(2012,1,8),4],[gd(2012,1,9),7],[gd(2012,1,10),8],[gd(2012,1,11),9],[gd(2012,1,12),6],[gd(2012,1,13),4],[gd(2012,1,14),5],[gd(2012,1,15),11],[gd(2012,1,16),8],[gd(2012,1,17),8],[gd(2012,1,18),11],[gd(2012,1,19),11],[gd(2012,1,20),6],[gd(2012,1,21),6],[gd(2012,1,22),8],[gd(2012,1,23),11],[gd(2012,1,24),13],[gd(2012,1,25),7],[gd(2012,1,26),9],[gd(2012,1,27),9],[gd(2012,1,28),8],[gd(2012,1,29),5],[gd(2012,1,30),8],[gd(2012,1,31),25]];
+	        var data3=[[gd(2012,1,1),800],[gd(2012,1,2),500],[gd(2012,1,3),600],[gd(2012,1,4),700],[gd(2012,1,5),500],[gd(2012,1,6),456],[gd(2012,1,7),800],[gd(2012,1,8),589],[gd(2012,1,9),467],[gd(2012,1,10),876],[gd(2012,1,11),689],[gd(2012,1,12),700],[gd(2012,1,13),500],[gd(2012,1,14),600],[gd(2012,1,15),700],[gd(2012,1,16),786],[gd(2012,1,17),345],[gd(2012,1,18),888],[gd(2012,1,19),888],[gd(2012,1,20),888],[gd(2012,1,21),987],[gd(2012,1,22),444],[gd(2012,1,23),999],[gd(2012,1,24),567],[gd(2012,1,25),786],[gd(2012,1,26),666],[gd(2012,1,27),888],[gd(2012,1,28),900],[gd(2012,1,29),178],[gd(2012,1,30),555],[gd(2012,1,31),993]];
+	        var dataset=[{label:"订单数",data:data3,color:"#1ab394",bars:{show:true,align:"center",barWidth:24*60*60*600,lineWidth:0}},{label:"订单交易金额",data:data2,yaxis:2,color:"#464f88",lines:{lineWidth:1,show:true,fill:true,fillColor:{colors:[{opacity:0.2},{opacity:0.2}]}},splines:{show:false,tension:0.6,lineWidth:1,fill:0.1},}];
+	        var options={xaxis:{mode:"time",tickSize:[3,"day"],tickLength:0,axisLabel:"Date",axisLabelUseCanvas:true,axisLabelFontSizePixels:12,axisLabelFontFamily:"Arial",axisLabelPadding:10,color:"#838383"},yaxes:[{position:"left",max:1070,color:"#838383",axisLabelUseCanvas:true,axisLabelFontSizePixels:12,axisLabelFontFamily:"Arial",axisLabelPadding:3},{position:"right",clolor:"#838383",axisLabelUseCanvas:true,axisLabelFontSizePixels:12,axisLabelFontFamily:" Arial",axisLabelPadding:67}],legend:{noColumns:1,labelBoxBorderColor:"#000000",position:"nw"},grid:{hoverable:false,borderWidth:0,color:"#838383"}};
+	        function gd(year,month,day){
+	        	return new Date(year,month-1,day).getTime()
+	        }
+	        var previousPoint=null,previousLabel=null;
+	        $.plot($("#flot-dashboard-chart"),dataset,options);
+	        var mapData={"US":298,"SA":200,"DE":220,"FR":540,"CN":120,"AU":760,"BR":550,"IN":200,"GB":120,};
+	        $("#world-map").vectorMap({map:"world_mill_en",backgroundColor:"transparent",regionStyle:{initial:{fill:"#e4e4e4","fill-opacity":0.9,stroke:"none","stroke-width":0,"stroke-opacity":0}},series:{regions:[{values:mapData,scale:["#1ab394","#22d6b1"],normalizeFunction:"polynomial"}]},})
+	   });
+     /*]]>*/
+    </script>
+    
+    <script type="text/javascript">
+    	function daySum(){
+    		 $.ajax({
+			    url:'/get_day_sum.action',
+			    type:'GET', //GET
+			    async:true,    //或false,是否异步
+			    timeout:5000,    //超时时间
+			    success:function(data){
+					$("#ordernum").text(data[0]);
+					$("#ordermon").text(data[1]);
+					$("#artnum").text(data[2]);
+			    }
+			}); 
+    	}
+    	
+    	function monthSum(){
+    		 $.ajax({
+ 			    url:'/get_month_sum.action',
+ 			    type:'GET', //GET
+ 			    async:true,    //或false,是否异步
+ 			    timeout:5000,    //超时时间
+ 			    success:function(data){
+ 					$("#ordernum").text(data[0]);
+ 					$("#ordermon").text(data[1]);
+ 					$("#artnum").text(data[2]);
+ 			    }
+ 			}); 
+    	}
+    	
+    	function yearSum(){
+    		$.ajax({
+ 			    url:'/get_month_sum.action',
+ 			    type:'GET', //GET
+ 			    async:true,    //或false,是否异步
+ 			    timeout:5000,    //超时时间
+ 			    success:function(data){
+ 					$("#ordernum").text(data[0]);
+ 					$("#ordermon").text(data[1]);
+ 					$("#artnum").text(data[2]);
+ 			    }
+ 			}); 
+    	}
+    </script>
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+</body>
+
+</html>

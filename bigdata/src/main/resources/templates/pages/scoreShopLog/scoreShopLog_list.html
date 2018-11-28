@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title></title>
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/temp_base.css"/>
+		<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+	</head>
+<body>
+<!-- <input id="com" type="hidden" th:value="${article.list}"/> -->
+	<div class="temp-base">
+	    
+		<div class="content">
+		<span class="btn_sm_blue1" onclick="javascript:addCom()">添加店铺评价</span>
+        <div class="tempList" style="margin-top: 30px;">
+            <table>
+                <tr>
+                    <th>序号</th>
+                    <th>店铺名称</th>
+                    <th>评价分数</th>
+                    <th>评价内容</th>
+                    <th>操作</th>
+                </tr>
+                <tr th:each="list,comStat : ${scoreShopLog}">
+                		<td th:text="${comStat.count}"></td>
+						<td th:text="${list.sname}"></td>
+						<td th:text="${list.score}"></td>
+						<td th:text="${list.info}"></td>
+						<td>
+								<span class="btn_sm_blue7 updateCom" th:onclick="'javascript:update('+${list.id}+');'">修改</span>
+								<span class="btn_sm_blue7 deleteCom" th:onclick="'javascript:deleteC('+${list.id}+');'">删除</span>
+						</td>
+				</tr>
+            </table>
+            <div id="popupFormDiv" style="display:none;"></div>
+            <input type="hidden" id="rows" name="rows" th:value="${rows}"/>
+			<input type="hidden" id="pageSize" name="pageSize" th:value="${pageSize}"/>
+			<input type="hidden" id="pageCurrent" name="pageCurrent" th:value="${pageCurrent}"/>
+			<input type="hidden" id="pageCount" name="pageCount" th:value="${pageCount}"/>
+        </div>
+        <div class="pages_box">
+			<div class="custom_pager" style="margin-top: 40px;"></div>
+		</div>
+		</div>
+		</div>
+		<script src="../js/jquery.min.js"></script>
+   		<script src="../js/layui/layui.js"></script>
+    	<script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+    	<script src="../js/plugins/datapicker/bootstrap-datepicker.js"></script>
+    	<script src="../js/company/scoreShopLog_list.js"></script>
+    	<script th:inline="javascript">
+    	//var express = [[${express}]];
+    	//console.log(express);
+    	//更新后的返回信息
+	    	var upInfo = [[${upInfo}]];
+	        $(document).ready(function () {
+	            if(upInfo!=null){
+	                swal({
+	                     title : "提示",
+	                     text : upInfo
+	                });
+	            }
+	        });
+	        
+    	</script>
+    	<script type="text/javascript">
+       	var count = $("#rows").val();
+    	var limit = $("#pageSize").val();
+    	var pageCurrent = $("#pageCurrent").val();
+    	var pageCount = $("#pageCount").val();
+    	layui.use([ "form", "laydate", "layer", "laypage" ],
+    			function() {
+    				var form = layui.form;
+    				var laydate = layui.laydate;
+    				var layer = layui.layer;
+    				var laypage = layui.laypage;
+    				
+    				$(".laydate_time").each(function() {
+    					laydate.render({elem : this
+    						});
+    				});
+    				//分页器
+    				$(".custom_pager").each(function () {
+    					laypage.render({
+    						elem: this,
+    						count: count,	// 数据条数
+    						limit: limit,	// 限制每页显示的数据条数
+    						curr: pageCurrent,	// 起始默认页面
+    						groups: 6,	// 分页器连续出现的页码个数
+    						layout: ['prev', 'page', 'next'],	//自定义排版
+    						//当分页被切换时触发(包括首次加载)
+    						jump: function (obj, first) {
+
+    							var html = '<div class="custom_pager_count">' +
+    											'共' + obj.pages + '页, 第' + obj.curr + '页' +
+    										'</div>';
+    							$(obj.elem).append(html);
+
+    							if (first) {
+    								return;
+    							}else{
+    								window.location.href="scoreShopLogList_"+obj.curr+"_0_0"
+    								var html = '<div class="custom_pager_count">' +
+    								'共' + obj.pages + '页, 第' + pageCurrent + '页' +
+    								'</div>';
+    								$(".custom_pager_count").remove();
+    								$(obj.elem).append(html);
+    							}
+    						}
+    					});
+    				});
+    			})
+    	</script>
+	</body>
+</html>

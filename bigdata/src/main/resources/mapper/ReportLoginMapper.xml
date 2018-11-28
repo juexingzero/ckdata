@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.ReportLoginService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.ReportLogin">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="mobile_user_id" jdbcType="INTEGER" property="mobileUserId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, mobile_user_id, name, password, update_time
+  </sql>
+  <insert id="saveReportLogin" parameterType="com.manhui.model.ReportLogin" >
+  	insert into bg_report_login
+  	<trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+       <if test="mobileUserId != null">
+        mobile_user_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="mobileUserId != null">
+        #{mobileUserId,jdbcType=INTEGER},
+      </if>
+     <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+       #{password,jdbcType=VARCAHR},
+      </if>
+      <if test="updateTime != null">
+       #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="findReportLoginOrderByTime" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_report_login
+  	where mobile_user_id = #{mobileUserId,jdbcType=INTEGER} order by update_time desc
+  </select> 
+</mapper>

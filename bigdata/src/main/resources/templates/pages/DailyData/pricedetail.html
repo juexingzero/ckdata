@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>HOME</title>
+
+  <link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/temp_base.css"/>
+		<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+	
+</head>
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+	<div class="temp-base">
+		<div class="content">
+		<div><label>当前位置-价格历史变动-详细信息</label></div>
+		
+         <div class="tempList" style="margin-top: 30px;">
+            <table>
+                <tr>
+                    <th>序号</th>
+                    <th>商品名称</th>
+                    <th>变动前价格</th>
+                    <th>变动后价格</th>
+                    <th>变动时间</th>
+                </tr>
+                
+                <tr th:each="apl,userStat : ${aplList}">
+						<td th:text="${userStat.count}"></td> 
+						<td th:text="${apl.article.title}"></td>
+						<td th:text="${apl.oldPrice}"></td>
+						<td th:text="${apl.newPrice}"></td>
+						<td th:text="${apl.addTime}"></td>
+				</tr>
+            </table>
+        </div>
+        <div class="col-sm-4 col-sm-offset-2">
+               <button style="margin-left: 300px" class="btn btn-primary" type="button" th:onclick="'javascript:history.back(-1)'">&nbsp;&nbsp;&nbsp;&nbsp;返&nbsp;&nbsp;&nbsp;&nbsp;回&nbsp;&nbsp;&nbsp;&nbsp;</button>
+        </div>
+		</div>
+		</div>
+   <script src="../js/jquery.min.js"></script>
+   		<script src="../js/layui/layui.js"></script>
+    	<script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+    	<script src="../js/plugins/datapicker/bootstrap-datepicker.js"></script>
+</body>
+</html>

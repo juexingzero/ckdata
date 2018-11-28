@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.service.DayOrderLogService" >
+  <resultMap id="BaseResultMap" type="com.manhui.model.DayOrderLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="per_amount" property="perAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, add_time, order_num, total_amount, per_amount
+  </sql>
+  
+  <select id="findDayOL" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from bg_day_order_log
+  	where add_time like #{0}
+  </select>
+  
+  <select id="findOrderNum" parameterType="java.lang.String" resultType="java.lang.Integer">
+  	select SUM(order_num) from bg_day_order_log 
+  	where add_time like #{0}
+  </select>
+  
+  <select id="findOrderMoney" parameterType="java.lang.String" resultType="java.math.BigDecimal">
+  	select SUM(total_amount) from bg_day_order_log 
+  	where add_time like #{0}
+  </select>
+  
+  <select id="findOrderMoneyByMonth" parameterType="java.lang.String" resultType="java.math.BigDecimal">
+  	select SUM(total_amount) from bg_day_order_log where DATE_FORMAT(add_time, '%m') = #{0}
+  </select>
+  
+  <select id="findOrderNumByMonth" parameterType="java.lang.String" resultType="java.lang.Integer">
+  	select SUM(order_num) from bg_day_order_log where DATE_FORMAT(add_time, '%m') = #{0}
+  </select>
+  
+  <select id="findDayOrderNumByMonth" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select DATE_FORMAT(add_time, '%d') as add_time,sum(order_num) as order_num from bg_day_order_log where DATE_FORMAT(add_time, '%m') = #{0}
+  	 GROUP BY DATE_FORMAT(add_time, '%Y-%m-%d')
+  </select>
+  
+  <select id="findDayOrderMoneyByMonth" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select DATE_FORMAT(add_time, '%d') as add_time,sum(total_amount) as total_amount from bg_day_order_log where DATE_FORMAT(add_time, '%m') = #{0}
+  	 GROUP BY DATE_FORMAT(add_time, '%Y-%m-%d')
+  </select>
+  
+  <select id="findOrderMoneyByYear" parameterType="java.lang.String" resultType="java.math.BigDecimal">
+  	select SUM(total_amount) from bg_day_order_log where DATE_FORMAT(add_time, '%Y') = #{0}
+  </select>
+  
+  <select id="findOrderNumByYear" parameterType="java.lang.String" resultType="java.lang.Integer">
+  	select SUM(order_num) from bg_day_order_log where DATE_FORMAT(add_time, '%Y') = #{0}
+  </select>
+</mapper>

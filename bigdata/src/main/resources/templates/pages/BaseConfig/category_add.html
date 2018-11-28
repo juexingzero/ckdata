@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+    	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>新增类目</title>
+		<link rel="stylesheet" href="../css/bootstrap.min14ed.css?v=3.3.6"/>
+		<link rel="stylesheet" href="../css/font-awesome.min93e3.css?v=4.4.0"/>
+		<link rel="stylesheet" href="../css/animate.min.css" />
+		<link rel="stylesheet" href="../css/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../css/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../css/style.min862f.css?v=4.1.0" />
+		<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css" />
+		<link rel="stylesheet" href="../css/base.css"/>
+		<link rel="stylesheet" href="../css/plan_style.css"/>
+	</head>
+	<body style="padding-right: 24px;padding-bottom: 24px; padding-left: 24px;">
+		<div class="plan_layout">
+			<form action="add_subcategory.action" method="post" class="layui-form" id="formTag">
+				<div class="plan_form_box1">
+					<div class="form_box_title">新增类目</div>
+					<table style="margin-top: 20px;">
+						<tr>
+							<td>
+							<div class="form_item">
+								<label>选择行业：</label>
+								<div class="input_wrap input_size_275">
+									<select name="pid" lay-verify="">
+										<option value="0">全部</option>
+										<option th:each="mainCategory : ${mainCategorys}" th:value="${mainCategory.id}" th:text="${mainCategory.name}"></option>
+									</select>
+									<div class="layui-unselect layui-form-select">
+										<div class="layui-select-title">
+											<input type="text" placeholder="请选择" value="不限" readonly="" class="layui-input layui-unselect"/> 
+											<i class="layui-edge"></i>
+										</div>
+										<dl class="layui-anim layui-anim-upbit" style="">
+											<dd lay-value="0" class="">全部</dd>
+											<dd th:each="mainCategory : ${mainCategorys}" th:lay-value="${mainCategory.id}" th:text="${mainCategory.name}"></dd>
+										</dl>
+									</div>
+								</div>
+							</div>
+						</td>
+						</tr>
+						<tr>
+							<td class="pt_20" colspan="2" style="padding-bottom: 20px;">
+								<div class="form_item">
+									<label style="width: 120px;"><span class="star">*</span>
+										类目名称：
+									</label>
+									<div class="input_wrap" style="margin-top: 10px;">
+										<input type="text" id="categoryName" name="name" placeholder="请输入类目名称" class="layui-input nav_input" value="" style="width: 200px;"/>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="pt_20" colspan="2" style="padding-bottom: 20px;">
+								<div class="form_item">
+									<label style="width: 120px;"><span class="star">*</span>
+										类目深度：
+									</label>
+									<div class="input_wrap">
+										<input type="text" id="classLayer" name="classLayer" placeholder="请输入类目深度" class="layui-input nav_input" style="width: 200px;" />
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+		
+					<div class="foot_btn_box" style="margin-top: 100px;">
+						<span class="btn_sm_blue1" onclick="save()">提交</span>
+						<span class="btn_sm_white3" style="margin-left: 60px;" onclick="cancel()">取消</span>
+					</div>
+				</div>
+			</form>
+		</div>
+		<script src="../js/jquery.min.js?v=2.1.4"></script>
+   		<script src="../js/layui/layui.js"></script>
+    	<script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+    	<script src="../js/plugins/datapicker/bootstrap-datepicker.js"></script>
+		<script type="text/javascript">
+			layui.use(["form", "laydate", "layer", "laypage"], function () {
+				var form = layui.form;
+				var laydate = layui.laydate;
+				var layer = layui.layer;
+				var laypage = layui.laypage;
+	
+				$(".laydate_time").each(function () {
+					laydate.render({
+						elem: this
+					});
+				});
+			})
+			
+			function save(){
+				var categoryName = $("#categoryName").val();
+				if(categoryName == null || categoryName == ''){
+					layer.alert('类目名称未填写', {
+						  icon: 2,
+						  skin: 'layer-ext-moon' 
+					});
+					return false;
+				}
+				var classLayer = $("#classLayer").val();
+				if(classLayer == null || classLayer == ''){
+					layer.alert('类目深度未填写', {
+						  icon: 2,
+						  skin: 'layer-ext-moon' 
+					});
+					return false;
+				}
+				$("#formTag").submit();
+				// 将表单复制到父画面，在父页面的回调函数里提交表单
+				var popupFormDiv = $(parent.document.body).children("div[id='popupFormDiv']").append($("#formTag"));
+    			var index = parent.layer.getFrameIndex(window.name); 
+	            parent.layer.close(index);
+    		}
+		
+			function cancel(){
+				var index = parent.layer.getFrameIndex(window.name);
+			    parent.layer.close(index);
+			}
+		</script>
+	</body>
+</html>

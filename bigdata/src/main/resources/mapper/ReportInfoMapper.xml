@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.ReportInfoService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.ReportInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="lingyou" jdbcType="DECIMAL" property="lingyou" />
+    <result column="sxsp" jdbcType="DECIMAL" property="sxsp" />
+    <result column="ganhuo" jdbcType="DECIMAL" property="ganhuo" />
+    <result column="xxsp" jdbcType="DECIMAL" property="xxsp" />
+    <result column="yanjiu" jdbcType="DECIMAL" property="yanjiu" />
+    <result column="fzzs" jdbcType="DECIMAL" property="fzzs" />
+    <result column="hzp" jdbcType="DECIMAL" property="hzp" />
+    <result column="jyzb" jdbcType="DECIMAL" property="jyzb" />
+    <result column="ryp" jdbcType="DECIMAL" property="ryp" />
+    <result column="jiadian" jdbcType="DECIMAL" property="jiadian" />
+    <result column="zxyp" jdbcType="DECIMAL" property="zxyp" />
+    <result column="whbg" jdbcType="DECIMAL" property="whbg" />
+    <result column="jiaju" jdbcType="DECIMAL" property="jiaju" />
+    <result column="txqc" jdbcType="DECIMAL" property="txqc" />
+    <result column="jzzhcl" jdbcType="DECIMAL" property="jzzhcl" />
+    <result column="nzsc" jdbcType="DECIMAL" property="nzsc" />
+    <result column="hgcp" jdbcType="DECIMAL" property="hgcp" />
+    <result column="jidian" jdbcType="DECIMAL" property="jidian" />
+    <result column="mucai" jdbcType="DECIMAL" property="mucai" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="mode" jdbcType="INTEGER" property="mode" />
+    <result column="daimai_total" jdbcType="DECIMAL" property="daimaiTotal" />
+    <result column="xiaoshou_total" jdbcType="DECIMAL" property="xiaoshouTotal" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, lingyou, sxsp, ganhuo, xxsp, yanjiu, fzzs, hzp, jyzb, ryp, jiadian, zxyp, whbg, 
+    jiaju, txqc, jzzhcl, nzsc, hgcp, jidian, mucai, add_time, mode, daimai_total, xiaoshou_total
+  </sql>
+  
+  <select id="countList" resultType="map">
+  	SELECT IFNULL(SUM(daimai_total),0)+IFNULL(SUM(xiaoshou_total),0) AS total,add_time AS date 
+  	FROM bg_report_info 
+  	GROUP BY add_time 
+  	ORDER BY add_time DESC
+  </select>
+  
+  <select id="findReportInfoByDate" parameterType="date" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/>
+  	from bg_report_info where add_time = DATE_FORMAT(#{date},'%Y-%m-%d')
+  </select>
+  
+  <insert id="saveReportInfo" parameterType="com.manhui.model.ReportInfo">
+  	insert into bg_report_info(lingyou, sxsp, ganhuo, xxsp, yanjiu, fzzs, hzp, jyzb, ryp, jiadian, zxyp, whbg, 
+    jiaju, txqc, jzzhcl, nzsc, hgcp, jidian, mucai, add_time, mode, daimai_total, xiaoshou_total)
+    values(#{lingyou},#{sxsp},#{ganhuo},#{xxsp},#{yanjiu},#{fzzs},#{hzp},#{jyzb},#{ryp},#{jiadian},#{zxyp},#{whbg},
+    #{jiaju},#{txqc},#{jzzhcl},#{nzsc},#{hgcp},#{jidian},#{mucai},date_format(now(),'%y-%m-%d'),#{mode},#{daimaiTotal},#{xiaoshouTotal}
+    )
+  </insert>
+</mapper>

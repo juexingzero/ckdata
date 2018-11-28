@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.BaseRegionService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.BaseRegion">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_code" jdbcType="VARCHAR" property="parentCode" />
+    <result column="firstjianpin" jdbcType="CHAR" property="firstjianpin" />
+    <result column="jianpin" jdbcType="VARCHAR" property="jianpin" />
+    <result column="pinyin" jdbcType="VARCHAR" property="pinyin" />
+    <result column="engname" jdbcType="VARCHAR" property="engname" />
+    <result column="shortname" jdbcType="VARCHAR" property="shortname" />
+    <result column="fullname" jdbcType="VARCHAR" property="fullname" />
+    <result column="mergername" jdbcType="VARCHAR" property="mergername" />
+    <result column="mergershortname" jdbcType="VARCHAR" property="mergershortname" />
+    <result column="level" jdbcType="TINYINT" property="level" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="areacode" jdbcType="VARCHAR" property="areacode" />
+    <result column="zipcode" jdbcType="VARCHAR" property="zipcode" />
+    <result column="lng" jdbcType="DECIMAL" property="lng" />
+    <result column="lat" jdbcType="DECIMAL" property="lat" />
+    <result column="geohash" jdbcType="VARCHAR" property="geohash" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, code, name, parent_code, firstjianpin, jianpin, pinyin, engname, shortname, fullname, 
+    mergername, mergershortname, level, state, areacode, zipcode, lng, lat, geohash, 
+    remark
+  </sql>
+  
+  <select id="findBaseRegionCount" resultType="java.lang.Integer">
+  	select count(id) from bg_base_region
+  	where state = 1
+  </select>
+  
+  <select id="findBaseRegionPage" parameterType="com.manhui.model.BaseRegion" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_base_region
+  	where state = 1 order by code limit #{start},#{end}
+  </select>
+  
+  <select id="findAllBaseRegion" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_base_region
+  	where state = 1 order by code
+  </select>
+  
+  <select id="findBaseRegionById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_base_region
+  	where id=#{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="findProvByParentCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_base_region
+  	where parent_code = #{parentCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="findRegionDataByParentCodeAndLevel" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_base_region
+  	where parent_code = #{arg0} and level = #{arg1}
+  </select>
+  
+  <insert id="insertBaseRegion" parameterType="com.manhui.model.BaseRegion">
+  	insert into bg_base_region
+  	<trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+       <if test="code != null">
+        code,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="parentCode != null">
+        parent_code,
+      </if>
+      <if test="firstjianpin != null">
+        firstjianpin,
+      </if>
+      <if test="jianpin != null">
+        jianpin,
+      </if>
+      <if test="pinyin != null">
+        pinyin,
+      </if>
+      <if test="engname != null">
+        engname,
+      </if>
+      <if test="shortname != null">
+        shortname,
+      </if>
+      <if test="fullname != null">
+        fullname,
+      </if>
+      <if test="mergername != null">
+        mergername,
+      </if>
+      <if test="mergershortname != null">
+        mergershortname,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="areacode != null">
+        areacode,
+      </if>
+      <if test="zipcode != null">
+        zipcode,
+      </if>
+      <if test="lng != null">
+        lng,
+      </if>
+      <if test="lat != null">
+        lat,
+      </if>
+      <if test="geohash != null">
+        geohash,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+     <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentCode != null">
+       #{parentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="firstjianpin != null">
+       #{firstjianpin,jdbcType=CHAR},
+      </if>
+      <if test="jianpin != null">
+       #{jianpin,jdbcType=VARCHAR},
+      </if>
+      <if test="pinyin != null">
+        #{pinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="engname != null">
+        #{engname,jdbcType=VARCHAR},
+      </if>
+      <if test="shortname != null">
+        #{shortname,jdbcType=VARCHAR},
+      </if>
+      <if test="fullname != null">
+        #{fullname,jdbcType=VARCHAR},
+      </if>
+      <if test="mergername != null">
+        #{mergername,jdbcType=VARCHAR},
+      </if>
+      <if test="mergershortname != null">
+        #{mergershortname,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+       #{state,jdbcType=INTEGER},
+      </if>
+      <if test="areacode != null">
+       #{areacode,jdbcType=VARCHAR},
+      </if>
+      <if test="zipcode != null">
+       #{zipcode,jdbcType=VARCHAR},
+      </if>
+      <if test="lng != null">
+       #{lng,jdbcType=DECIMAL},
+      </if>
+      <if test="lat != null">
+       #{lat,jdbcType=DECIMAL},
+      </if>
+      <if test="geohash != null">
+       #{geohash,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+       #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteBaseRegion" parameterType="java.lang.Integer">
+  	delete from bg_base_region where id=#{id,jdbcType=INTEGER}
+  </delete>
+  
+  <select id="getCodeByName" parameterType="string" resultType="string">
+  	select code from bg_base_region where `name` like concat(concat('%',#{name}),'%')
+  </select>
+</mapper>

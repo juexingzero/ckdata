@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.service.OrderService" >
+  <resultMap id="BaseResultMap" type="com.manhui.model.Order" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="article_id" property="articleId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="sell_time" property="sellTime" jdbcType="TIMESTAMP" />
+    <result column="sell_price" property="sellPrice" jdbcType="DECIMAL" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="express_id" property="expressId" jdbcType="INTEGER" />
+    <result column="express_no" property="expressNo" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+  </resultMap>
+  
+  <resultMap id="BaseResult" type="com.manhui.model.Order" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="article_id" property="articleId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="sell_time" property="sellTime" jdbcType="TIMESTAMP" />
+    <result column="sell_price" property="sellPrice" jdbcType="DECIMAL" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="express_id" property="expressId" jdbcType="INTEGER" />
+    <result column="express_no" property="expressNo" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+    <association property="shop" javaType="com.manhui.model.Shop">
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    </association>
+    <association property="article" javaType="com.manhui.model.Article">
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    </association>
+    <association property="category" javaType="com.manhui.model.Category">
+    <result column="leibie" property="leibie" jdbcType="VARCHAR" />
+    <result column="leimu" property="leimu" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  
+  <resultMap id="Resulta" type="com.manhui.model.Order" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="article_id" property="articleId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="sell_time" property="sellTime" jdbcType="TIMESTAMP" />
+    <result column="sell_price" property="sellPrice" jdbcType="DECIMAL" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="express_id" property="expressId" jdbcType="INTEGER" />
+    <result column="express_no" property="expressNo" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+    <association property="article" javaType="com.manhui.model.Article">
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+    </association>
+    <association property="channel" javaType="com.manhui.model.Channel">
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    </association>
+    <association property="express" javaType="com.manhui.model.Express">
+    <result column="kd" property="kd" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, article_id, shop_id, sell_time, sell_price, quantity, express_id, express_no, state
+  </sql>
+  <select id="getOrderList" parameterType="com.manhui.model.Order" resultMap="BaseResult">
+     select a.sell_price,a.quantity,b.`name`,c.title,d.name as leibie,e.name as leimu
+	from bg_order a INNER JOIN bg_shop b on a.shop_id=b.id INNER JOIN bg_article c on a.article_id=c.id INNER JOIN
+	bg_category d on c.category_id=d.id INNER JOIN bg_category e on d.pid=e.id
+	where a.state = 1 ORDER BY a.sell_price DESC limit 7
+  </select>
+  <select id="getPageOrder" parameterType="com.manhui.model.Order" resultMap="BaseResult">
+     select 
+     <include refid="Base_Column_List"></include>
+     from bg_order o
+      where 
+     o.state = 1 ORDER BY
+     o.id
+     LIMIT #{start},#{end}
+  </select>
+  <insert id="insertOrder">
+    insert into bg_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="articleId != null">
+        article_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="sellTime != null">
+        sell_time,
+      </if>
+      <if test="sellPrice != null">
+        sell_price,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+      <if test="expressId != null">
+        express_id,
+      </if>
+      <if test="expressNo != null">
+        express_no,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="articleId != null">
+        #{articleId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="sellTime != null">
+        #{sellTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sellPrice != null">
+        #{sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="expressId != null">
+        #{expressId,jdbcType=INTEGER},
+      </if>
+      <if test="expressNo != null">
+        #{expressNo,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+     select <include refid="Base_Column_List"></include>
+     from bg_order
+     where id = #{id}
+  </select>
+  <update id="updateOrder" parameterType="com.manhui.model.Order">
+    update bg_order
+    <set>
+      <if test="articleId != null">
+        article_id = #{articleId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="sellTime != null">
+        sell_time = #{sellTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sellPrice != null">
+        sell_price = #{sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="expressId != null">
+        express_id = #{expressId,jdbcType=INTEGER},
+      </if>
+      <if test="expressNo != null">
+        express_no = #{expressNo,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="deleteOrder" parameterType="com.manhui.model.Order">
+     update bg_order
+     <set>
+      <if test="state != null">
+        state = #{state,jdbcType=TINYINT},
+      </if>
+     </set>
+     where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getTopOrder" resultMap="BaseResultMap">
+  	select o.* from bg_order o,bg_article a where o.article_id = a.id
+  	order by sell_time desc LIMIT 0,5
+  </select>
+  
+  <select id="getTopExpressOrder" resultMap="BaseResultMap">
+  	select o.* from bg_order o,bg_express e where o.express_id = e.id
+  	order by sell_time desc LIMIT 0,7
+  </select>
+  
+  <select id="getCountOrder" resultType="java.lang.Integer">
+  	select count(id) from bg_order where state = 1
+  </select>
+  
+  <select id="getAllOrder" resultMap="BaseResultMap">
+  	select * from bg_order where state = 1
+  </select>
+
+  <select id="getOrderListByArticleId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select * from bg_order where article_id = #{atricleId,jdbcType=INTEGER} and state = 1
+  </select>
+  
+    <select id="findAllOrder" resultMap="Resulta">
+  	select a.id,a.sell_price,a.quantity,a.sell_time,b.img_url,d.`name`,b.price,b.title,a.express_no,e.name as kd,e.state from bg_order a 
+  	INNER JOIN bg_article b on a.article_id=b.id INNER JOIN bg_shop c on b.shop_id=c.id 
+  	INNER JOIN bg_channel d on c.channel_id=d.id INNER JOIN bg_express e on a.express_id=e.id
+			where
+			b.title like #{0}
+  </select>
+  
+  <select id="findOrder" resultMap="Resulta">
+  	select a.sell_price,a.quantity,a.sell_time,b.img_url,d.`name`,b.price,b.title,a.express_no,e.name as kd,e.state from bg_order a 
+  	INNER JOIN bg_article b on a.article_id=b.id INNER JOIN bg_shop c on b.shop_id=c.id 
+  	INNER JOIN bg_channel d on c.channel_id=d.id INNER JOIN bg_express e on a.express_id=e.id
+			where
+			a.id = #{0}
+  </select>
+</mapper>

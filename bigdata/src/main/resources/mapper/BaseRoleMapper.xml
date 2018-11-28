@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.BaseRoleService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.BaseRole">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="descr" jdbcType="VARCHAR" property="descr" />
+    <result column="popedom_id" jdbcType="INTEGER" property="popedomId" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, name, descr, popedom_id
+  </sql>
+  
+  <select id="findRoleByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from 
+  	bg_base_role where name like #{name,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="findRoleByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select r.* from 
+  	bg_base_role r,bg_base_rule u where r.id = u.role_id
+  	and u.user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="findBaseRole" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from 
+  	bg_base_role
+  </select>
+  
+  <update id="updateBaseRole" parameterType="com.manhui.model.BaseRole">
+  	  UPDATE bg_base_role set
+  		<set>
+	  	  <if test="name != null">
+	        name = #{name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="descr != null">
+	        descr = #{descr,jdbcType=VARCHAR},
+	      </if>
+	      <if test="popedomId != null">
+	        popedom_id = #{popedomId,jdbcType=INTEGER},
+	      </if>
+	  </set>
+	   WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <insert id="insertBaseRole" parameterType="com.manhui.model.BaseRole">
+  	 insert into bg_base_role 
+  	  <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="descr != null">
+        descr,
+      </if>
+      <if test="popedomId != null">
+        popedom_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+     <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="descr != null">
+       #{descr,jdbcType=VARCHAR},
+      </if>
+      <if test="popedomId != null">
+       #{popedomId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

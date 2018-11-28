@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.BaseUserService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.BaseUser">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, username, password, salt,state
+  </sql>
+  
+  <select id="findByUserAndPassword" parameterType="com.manhui.model.BaseUser" resultMap="BaseResultMap">
+  	 select <include refid="Base_Column_List"></include> from 
+  	 bg_base_user where username = #{username,jdbcType=VARCHAR}
+  	 and password = #{password,jdbcType=VARCHAR}
+  	 and state = 1
+  </select>
+  
+  <select id="findByBaseUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	 select <include refid="Base_Column_List"></include> from 
+  	 bg_base_user where username like #{username,jdbcType=VARCHAR}
+  	 and state = 1
+  </select>
+  
+  <select id="findByRoleId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	 select u.* from 
+  	 bg_base_user u,bg_base_rule r where u.id = r.user_id 
+  	 and r.role_id = #{roleId,jdbcType=INTEGER}
+  	 and state = 1
+  </select>
+  
+  <select id="findByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from 
+  	bg_base_user where id = #{userId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="findBaseUser" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from
+  	bg_base_user
+  </select>
+  
+  <select id="findBaseUserMaxId" resultType="java.lang.Integer">
+  	select MAX(id) from bg_base_user
+  </select>
+  
+  <update id="updateBaseUser" parameterType="com.manhui.model.BaseUser">
+  		UPDATE bg_base_user
+  		<set>
+	  	  <if test="username != null">
+	        username = #{username,jdbcType=VARCHAR},
+	      </if>
+	      <if test="password != null">
+	        password = #{password,jdbcType=VARCHAR},
+	      </if>
+	      <if test="salt != null">
+	        salt = #{salt,jdbcType=VARCHAR},
+	      </if>
+	      <if test="state != null">
+	        state = #{state,jdbcType=INTEGER},
+	      </if>
+	  </set>
+	   WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <insert id="insertBaseUser" parameterType="com.manhui.model.BaseUser">
+  	  insert into bg_base_user 
+  	  <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="salt != null">
+        salt,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+     <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+       #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null">
+       #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+       #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteBaseUser" parameterType="java.lang.Integer">
+  	delete from bg_base_user where id = #{id,jdbcType=INTEGER}
+  </delete>
+</mapper>

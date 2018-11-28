@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.ExpressService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.Express">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="express_code" jdbcType="VARCHAR" property="expressCode" />
+    <result column="express_fee" jdbcType="DECIMAL" property="expressFee" />
+    <result column="website" jdbcType="VARCHAR" property="website" />
+    <result column="sortid" jdbcType="INTEGER" property="sortid" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, express_code, express_fee, website, sortid, state, remark
+  </sql>
+  <select id="findAllExpressCount" resultType="java.lang.Integer">
+  	select count(id) from bg_express where state = 1
+  </select>
+  
+  <select id="findAllExpressPage" parameterType="com.manhui.model.Express" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_express where state = 1
+  	order by sortid limit #{start},#{end}
+  </select>
+  
+  <select id="getPageExpress" parameterType="com.manhui.util.PageBean" resultType="java.util.Map">
+     select 
+     <include refid="Base_Column_List"></include>
+     from bg_express e
+      where 
+     e.state = 1 ORDER BY
+     e.id
+    LIMIT #{start},#{end}
+  </select>
+  
+  <select id="findAllExpress" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_express
+  	where state = 1 order by sortid
+  </select>
+  
+  <select id="findExpressById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_express 
+  	where id = #{id,jdbcType=INTEGER} 
+  </select>
+  
+  <insert id="insertExpress" parameterType="com.manhui.model.Express">
+  	insert into bg_express
+  	<trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="expressCode != null">
+        express_code,
+      </if>
+      <if test="expressFee != null">
+        express_fee,
+      </if>
+      <if test="website != null">
+        website,
+      </if>
+      <if test="sortid != null">
+        sortid,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+     <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="expressCode != null">
+       #{expressCode,jdbcType=VARCHAR},
+      </if>
+      <if test="expressFee != null">
+       #{expressFee,jdbcType=DECIMAL},
+      </if>
+      <if test="website != null">
+       #{website,jdbcType=VARCHAR},
+      </if>
+      <if test="sortid != null">
+        #{sortid,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+       #{state,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+       #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="selectExpressName" resultType="java.util.Map">
+  	SELECT
+		e.name
+	FROM
+		bg_express e
+	WHERE
+		state = 1
+	GROUP BY
+		e.name
+  </select>
+  <select id="findExpressByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_express
+  	where name = #{name,jdbcType=VARCHAR}
+  </select>
+  
+  <update id="updateExpress" parameterType="com.manhui.model.Express">
+    update bg_express
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="expressCode != null">
+        express_code = #{expressCode,jdbcType=VARCHAR},
+      </if>
+      <if test="expressFee != null">
+        express_fee = #{expressFee,jdbcType=DECIMAL},
+      </if>
+      <if test="website != null">
+        website = #{website,jdbcType=VARCHAR},
+      </if>
+      <if test="sortid != null">
+        sortid = #{sortid,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteExpress" parameterType="java.lang.Integer">
+     delete from bg_express where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <update id="deleteExpressState" parameterType="com.manhui.model.Express">
+	update bg_express
+     <set>
+      <if test="state != null">
+        state = #{state,jdbcType=TINYINT},
+      </if>
+     </set>
+     where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.CategoryService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.Category">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="class_list" jdbcType="VARCHAR" property="classList" />
+    <result column="class_layer" jdbcType="INTEGER" property="classLayer" />
+    <result column="sortid" jdbcType="INTEGER" property="sortid" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, name, pid, class_list, class_layer, sortid, state
+  </sql>
+  
+  <select id="count" resultType="java.lang.Integer">
+  	select count(id) from bg_category where pid = 0 and state = 1
+  </select>
+  
+  <select id="subCount" resultType="java.lang.Integer">
+  	select count(id) from bg_category where pid != 0 and state = 1
+   </select>
+  
+  <select id="getCategoryPage" parameterType="com.manhui.model.Category" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_category
+  	where pid = 0 and state = 1 order by sortid 
+    limit #{start},#{end}
+  </select>
+  
+  <select id="getSubCategoryPage" parameterType="com.manhui.model.Category" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_category
+  	where pid != 0 and state = 1 order by sortid 
+    limit #{start},#{end}
+  </select>
+  
+  <select id="getCategoryByCateIdForList" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_category
+  	where pid != 0 and state = 1 order by sortid
+  </select>
+  
+  <select id="getCategoryById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_category
+  	where id=#{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="getCategorySortByPid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  	select Max(sortid) from bg_category
+  	where pid = #{pId,jdbcType=INTEGER} and state = 1 
+  </select>
+  
+  <select id="getCategoryByPid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_category
+  	where pid = #{pId,jdbcType=INTEGER} and state = 1 
+  </select>
+  
+  <select id="getAllCategory" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_category
+  	where pid = 0 and state = 1 order by sortid 
+  </select>
+  
+  <insert id="insertMainCategory" parameterType="com.manhui.model.Category">
+  	insert into bg_category 
+  	<trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="classList != null">
+        class_list,
+      </if>
+      <if test="classLayer != null">
+        class_layer,
+      </if>
+      <if test="sortid != null">
+        sortid,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+     <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null">
+       #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="classList != null">
+       #{classList,jdbcType=VARCHAR},
+      </if>
+      <if test="classLayer != null">
+       #{classLayer,jdbcType=INTEGER},
+      </if>
+      <if test="sortid != null">
+        #{sortid,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+       #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteMainCategory" parameterType="java.lang.Integer">
+  	delete from bg_category where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <delete id="deleteCategory" parameterType="java.lang.Integer">
+  	delete from bg_category where pid = #{pid,jdbcType=INTEGER}
+  </delete>
+</mapper>

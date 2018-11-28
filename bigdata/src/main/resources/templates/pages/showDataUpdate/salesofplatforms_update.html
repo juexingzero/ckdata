@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+    	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>渠道数据修改</title>
+		<link rel="stylesheet" href="../css/bootstrap.min14ed.css?v=3.3.6"/>
+		<link rel="stylesheet" href="../css/font-awesome.min93e3.css?v=4.4.0"/>
+		<link rel="stylesheet" href="../css/animate.min.css" />
+		<link rel="stylesheet" href="../css/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../css/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../css/style.min862f.css?v=4.1.0" />
+		<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css" />
+		<link rel="stylesheet" href="../css/base.css"/>
+		<link rel="stylesheet" href="../css/plan_style.css"/>
+	</head>
+	<body style="padding-right: 24px;padding-bottom: 24px; padding-left: 24px;">
+		<div class="plan_layout">
+			<form action="updateSoP.aciton" method="post" class="layui-form" id="formTag">
+				<div class="plan_form_box1">
+					<div class="form_box_title">渠道数据修改</div>
+					<table>
+						<tr>
+							<td class="pt_20" colspan="2" style="padding-bottom: 20px;">
+							<input type="hidden" name="id" th:value="${id}"/>
+								<div class="form_item">
+									<label style="width: 120px;"><span class="star">*</span>
+										请输入渠道名称：
+									</label>
+									<div class="input_wrap">
+										<input type="text" id="name" name="name" placeholder="请输入渠道名称" th:value="${sdu.name}" class="layui-input nav_input" style="width: 200px;" />
+									</div>
+								</div><span id="tips1" style="color: red; margin-left: 10px;"></span>
+							</td>
+						</tr>
+						<tr>
+							<td class="pt_20" colspan="2" style="padding-bottom: -30px;">
+								<div class="form_item">
+									<label style="width: 120px;"><span class="star">*</span>
+										请输入销售额：
+									</label>
+									<div class="input_wrap">
+										<input type="text" id="number" name="number" placeholder="请输入销售额" th:value="${sdu.number}" class="layui-input nav_input" style="width: 200px;" />
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+		
+					<div class="foot_btn_box" style="margin-top: 100px;">
+						<span class="btn_sm_blue1" onclick="save()">提交</span>
+						<span class="btn_sm_white3" style="margin-left: 60px;" onclick="cancel()">取消</span>
+					</div>
+				</div>
+			</form>
+		</div>
+		<script src="../js/jquery.min.js?v=2.1.4"></script>
+   		<script src="../js/layui/layui.js"></script>
+    	<script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+    	<script src="../js/plugins/datapicker/bootstrap-datepicker.js"></script>
+		<script type="text/javascript">
+			layui.use(["form", "laydate", "layer", "laypage"], function () {
+				var form = layui.form;
+				var laydate = layui.laydate;
+				var layer = layui.layer;
+				var laypage = layui.laypage;
+	
+				$(".laydate_time").each(function () {
+					laydate.render({
+						elem: this
+					});
+				});
+			})
+			
+			function save(){
+				//提交之前先对比旧密码是否一致、
+				var channalName = $("#name").val();
+				var channalSeles = $("#number").val();
+				if(channalName == null || channalName == ''){
+					layer.alert('渠道名称未填写', {
+						  icon: 2,
+						  skin: 'layer-ext-moon' 
+					});
+					return false;
+				}
+				if(channalSeles == null || channalSeles == ''){
+					layer.alert('销售额未填写', {
+						  icon: 2,
+						  skin: 'layer-ext-moon' 
+					});
+					return false;
+				}
+				$("#formTag").submit();
+				// 将表单复制到父画面，在父页面的回调函数里提交表单
+				var popupFormDiv = $(parent.document.body).children("div[id='popupFormDiv']").append($("#formTag"));
+    			var index = parent.layer.getFrameIndex(window.name); 
+	            parent.layer.close(index);
+    		}
+		
+			function cancel(){
+				var index = parent.layer.getFrameIndex(window.name);
+			    parent.layer.close(index);
+			}
+		</script>
+	</body>
+</html>

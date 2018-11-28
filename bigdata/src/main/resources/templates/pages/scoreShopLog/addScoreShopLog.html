@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>editCompany</title>
+    <!-- css库 -->
+    <link href="../cssAndJs/libs/bootstrap.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+    <!-- 自定义公共CSS文件 -->
+    <link rel="stylesheet" href="../css/company/base.css"/>
+    <link rel="stylesheet" href="../css/company/custom_form.css"/>
+
+    <link rel="stylesheet" href="../css/company/view_company.css"/>
+    <style>
+       .companyInfo {
+          position: relative;
+          width:200px;
+       }
+       #com_form {
+          height:100%;
+       }
+       .formBot {
+          position: relative;
+          text-align: center;
+          margin-top: 0px;
+       }
+       .imgUrl {
+          width:300px;
+          height:200px;
+       }
+       .wrap{
+  	 	 border: solid 1px #e1e1e1;
+  	 	 padding-bottom:300px;
+	  }
+	  .select-control {
+	     width:200px;
+	     height:34px;
+	     font-size:14px;
+	     border: solid 1px #e3e2e7;
+	     border-radius: 4px;
+         background-color: #fff;
+   		 color: #252626;
+	  }
+	  .express_t{
+  		 font-size:15px;
+  		 padding-left:20px;
+	  }
+    </style>
+</head>
+<body class="alert_style">
+  <form id="com_form" action="saveScoreShopLog" method="post">
+    <div class="style_wrap" id="scroll_wrap">
+        <div class="see_details_alert wrap">
+        <div class="company_info">新增店铺评价信息</div>
+            <span style="color:red;font-size:10px;margin-left:10px">提示：* 为必填项！</span>
+            <div class="c_title" style="margin-top:10px">
+                    <span class="express_t"><span style="color:red">*</span>店铺名称: 
+                    <select name="shopId" class="select-control">
+						<option value="0">全部</option>
+						<option th:each="listShop : ${listShop}" th:value="${listShop.id}" th:text="${listShop.name}"></option>
+					</select> 
+                    <span id = "tip1" style="color: red; margin-left: 10px;"></span>
+                    </span>
+                    <span class="express_t" style="margin-left:100px"><span style="color:red">*</span>评价分数: 
+                    <input type="text" id="score" name="score" class="layui-input companyInfo"/>
+                    <span id = "tip1" style="color: red; margin-left: 10px;"></span>
+                    </span>
+                </div>
+            <div class="c_title">
+            		<span class="express_t"><span style="color:red">*</span>评价内容: 
+                    <input type="text" id="info" name="info" class="layui-input companyInfo"/>
+                    <span id = "tip3" style="color: red; margin-left: 10px;"></span>
+                    </span>
+                </div>
+        </div>
+	  	<div class="formBot">
+	            <span class="btn_sm_blue8 mr_80" id="saveScoreShopLog">保存</span>
+	            <span class="btn_sm_white6" id="cancel">取消</span>
+	    </div>
+    </div>
+  </form>
+    <!-- js -->
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/company/layui.js"></script>
+    <script type="text/javascript" src="../js/company/jquery.nicescroll.js"></script>
+    <script type="text/javascript">
+    /*<![CDATA[*/
+    $(function () {
+        layui.use(['form'], function () {
+            var form = layui.form;
+
+            // 自定义滚动条
+            $("#scroll_wrap").niceScroll({
+                cursorcolor: "#4d98fb",
+                cursorwidth: "10px",
+                cursorborderradius: "0px",
+                autohidemode: false // 默认始终显示
+            });
+        })
+        
+      	//保存
+        $("#saveScoreShopLog").on("click",saveScoreShopLog);
+        $("#cancel").on("click",cancel);
+
+    });
+    
+    function saveScoreShopLog(){
+    	
+        $('#com_form').submit();
+        // 将表单复制到父画面，在父页面的回调函数里提交表单
+		var popupFormDiv = $(parent.document.body).children("div[id='popupFormDiv']").append($("#com_form"));
+		var index = parent.layer.getFrameIndex(window.name); 
+        parent.layer.close(index);
+    }
+    function cancel(){
+        closeAlert();
+    }
+
+    // 关闭当前弹框
+    function closeAlert() {
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    }
+    /*]]>*/
+    </script>
+</body>
+</html>

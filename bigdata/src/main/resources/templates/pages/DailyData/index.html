@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>HOME</title>
+
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet"/>
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet"/>
+    <link href="../css/animate.min.css" rel="stylesheet"/>
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet"/>
+	
+</head>
+<!--
+	作者：Jiangxiaosong
+	时间：2018-01-26
+	描述：首页
+-->
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+	价格历史变动
+    <script src="../js/jquery.min.js?v=2.1.4"></script>
+    <script src="../js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="../js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="../js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="../js/plugins/layer/layer.min.js"></script>
+    <script src="../js/hplus.min.js?v=4.1.0"></script>
+    <script src="../js/contabs.min.js"></script>
+    <!-- <script src="../s/plugins/pace/pace.min.js"></script> -->
+    <script type="text/javascript">
+		/* $(function(){
+			var t = setInterval("showMessage();", 5000);
+		}); */
+		
+		function showMessage(){
+			$.ajax({
+			    url:'/unreadMessageCount',
+			    type:'GET', //GET
+			    async:true,    //或false,是否异步
+			    timeout:5000,    //超时时间
+			    success:function(data){
+					if(data != 0){
+						layer.tips('您有'+data+'条未读消息', '.open-small-chat', {
+							  area: ['150px', '50px'],
+							  tips: [1, '#3595CC'],
+							  time: 2000
+						});
+					}
+			    }
+			});
+		};
+	</script>
+</body>
+</html>

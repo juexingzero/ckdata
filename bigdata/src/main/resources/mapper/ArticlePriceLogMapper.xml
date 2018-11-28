@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.service.ArticlePriceLogService" >
+  <resultMap id="BaseResultMap" type="com.manhui.model.ArticlePriceLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="article_id" property="articleId" jdbcType="INTEGER" />
+    <result column="old_price" property="oldPrice" jdbcType="DECIMAL" />
+    <result column="new_price" property="newPrice" jdbcType="DECIMAL" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <resultMap id="BaseResult" type="com.manhui.model.ArticlePriceLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="article_id" property="articleId" jdbcType="INTEGER" />
+    <result column="old_price" property="oldPrice" jdbcType="DECIMAL" />
+    <result column="new_price" property="newPrice" jdbcType="DECIMAL" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <association property="article" javaType="com.manhui.model.Article">
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, article_id, old_price, new_price, add_time
+  </sql>
+ 
+ 	<select id="findArticlePL" parameterType="com.manhui.model.ArticlePriceLog" resultMap="BaseResult">
+ 		select c.id,c.article_id,d.title,d.price,c.add_time from 
+		(select a.* from bg_article_price_log as a,
+		(select article_id,max(add_time) add_time from bg_article_price_log group by article_id) as b 
+		where a.article_id=b.article_id and a.add_time=b.add_time) c,bg_article d
+		where d.title like #{0} and c.article_id=d.id
+		ORDER BY c.id desc
+ 	</select>
+ 	
+ 	<select id="findAPLByaId" parameterType="com.manhui.model.ArticlePriceLog" resultMap="BaseResult">
+ 		select a.id,a.article_id,a.old_price,a.new_price,a.add_time,b.title 
+		from bg_article_price_log a,bg_article b 
+		where a.article_id=b.id and a.article_id=#{0}
+ 	</select>
+ 	
+ 	<select id="findAPLByaIds" parameterType="com.manhui.model.ArticlePriceLog" resultMap="BaseResult">
+ 		select a.*,b.title from bg_article_price_log a,bg_article b 
+ 		where a.article_id=b.id and a.article_id=#{0}
+ 	</select>
+ 	
+ 	<select id="findArticlePriceLog" resultMap="BaseResult">
+ 		select <include refid="Base_Column_List"></include> from bg_article_price_log
+ 	</select>
+ 	
+ 	<select id="findArticlePriceLogByMonth" parameterType="java.lang.String" resultMap="BaseResult">
+ 		select article_id from bg_article_price_log where DATE_FORMAT(add_time, '%m') = #{0} 
+		GROUP BY article_id
+ 	</select>
+ 	
+ 	<select id="findArticlePriceLogByDay" parameterType="java.lang.String" resultMap="BaseResult">
+ 		select article_id from bg_article_price_log where add_time like #{0} 
+		GROUP BY article_id
+ 	</select>
+ 	
+ 	<select id="findArticlePriceLogByYear" parameterType="java.lang.String" resultMap="BaseResult">
+ 		select article_id from bg_article_price_log where DATE_FORMAT(add_time, '%Y') = #{0} 
+		GROUP BY article_id
+ 	</select>
+</mapper>

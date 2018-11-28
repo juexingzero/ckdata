@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>管理员设置</title>
+		<link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/font-awesome.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+		<link rel="stylesheet" href="../cssAndJs/libs/layui/css/modules/laydate/default/laydate.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/base.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/plan_style.css"/>
+		<link rel="stylesheet" href="../cssAndJs/css/temp_base.css"/>
+		<link rel="stylesheet" href="../css/plugins/sweetalert/sweetalert.css"/>
+	</head>
+<body>
+	<div class="temp-base">
+		<div class="content">
+		<div><label>当前位置-系统配置管理-登录账号管理</label></div>
+		<div class="add_temp">
+            <span class="btn_sm_blue1" onclick="add_user();">新增用户</span>
+        </div>
+        <div class="tempList" style="margin-top: 30px;">
+            <table>
+                <tr>
+                    <th>序号</th>
+                    <th>用户名</th>
+                    <th>角色名</th>
+                    <th>角色描述</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                
+                <tr th:each="rule,userStat : ${rule}">
+					<td th:text="${userStat.count}"></td> 
+					<td th:text="${rule.username}"></td>
+					<td style="color: #4d98fb;">
+					<input type="hidden" name="userId" th:value="${rule.userId}"/>
+               		<input type="hidden" name="password" th:value="${rule.password}"/>
+               		<input type="hidden" name="roleId" th:value="${rule.roleId}"/>
+					<span th:text="${rule.name}"></span></td>
+					<td><span th:text="${rule.descr}"></span></td>
+					<td>
+						<span th:if="${rule.userState} == 0">已停用</span>
+						<span th:if="${rule.userState} == 1">已启用</span>
+					</td>
+					<td style="width: 600px;">
+						<div>
+							<span class="btn_sm_blue1" th:if="${rule.userState} == 0" th:onclick="'javascript:enable('+${rule.userId}+');'">启用</span>
+							<span class="btn_sm_blue1" th:if="${rule.userState} == 1" th:onclick="'javascript:stop('+${rule.userId}+');'">停用</span>
+							<span class="btn_sm_blue1" th:onclick="'javascript:delete_user('+${rule.userId}+');'">删除</span>
+						</div>
+					</td>
+				</tr>
+            </table>
+            <div id="popupFormDiv" style="display:none;"></div>
+        </div>
+		</div>
+		</div>
+		<script src="../js/jquery.min.js"></script>
+   		<script src="../js/layui/layui.js"></script>
+    	<script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+    	<script src="../js/plugins/datapicker/bootstrap-datepicker.js"></script>
+    	<script th:inline="javascript">
+	    	var flag = [[${flag}]];
+	        $(document).ready(function () {
+	            if(flag!=null){
+	                swal({
+	                     title : "提示",
+	                     text : flag
+	                });
+	            }
+	        });
+	        
+	        
+	        layui.use(["form", "laydate"], function () {
+				var form = layui.form;
+				var laydate = layui.laydate;
+		
+				$(".laydate_time").each(function () {
+					laydate.render({
+						elem: this
+					});
+				});
+			})
+			
+			//新增用户
+			function add_user() {
+	        	layer.open({
+					type : 2,
+					title : '新增用户',
+					skin : 'layui-layer-molv',
+					shadeClose : true,
+					shade: 0.3,
+					maxmin : false, //关闭最大化最小化按钮
+					area : ['600px', '700px'],
+					content : [ '/to_add_user.action','no'],
+					end : function() {
+						// 如果是通过单击关闭按钮关闭弹出层，父画面没有此表单
+						if ($("#popupFormDiv").length === 1) {
+							$("#popupFormDiv").submit();
+						}
+						location.reload();
+					}
+				});
+			}
+	        
+	      	//停用用户
+			function stop(userId){
+				layer.confirm('你确定要停用此用户么？', {
+				  btn: ['停用','取消'] //按钮
+				}, function(){
+					window.location.href="stop_user.action?userId="+userId;
+				}, function(){
+					layer.close();
+				});
+			}
+	      	
+			//启用用户
+			function enable(userId){
+				window.location.href="enable_user.action?userId="+userId;
+			}
+			
+			//删除用户
+			function delete_user(userId){
+				layer.confirm('你确定要删除此用户么？', {
+				  btn: ['确定','取消'] //按钮
+				}, function(){
+					window.location.href="/delete_user?userId="+userId;
+				}, function(){
+					layer.close();
+				});
+			}
+	        
+    </script>
+	</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>HOME</title>
+
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+
+  <link rel="stylesheet" href="../cssAndJs/libs/bootstrap.css"/>
+		<link rel="shortcut icon" href="favicon.ico"/> 
+    <link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet"/>
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet"/>
+    <link href="../css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet"/>
+    <link href="../js/plugins/gritter/jquery.gritter.css" rel="stylesheet"/>
+    <link href="../css/animate.min.css" rel="stylesheet"/>
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet"/>
+	
+</head>
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+	<div class="temp-base">
+		<div class="content">
+		<div><label>当前位置-行业日统计</label></div>
+		
+            
+             <div id="chartone" style="width: 1200px;height: 600px"></div>
+		</div>
+		</div>
+   <script src="../js/jquery.min.js"></script>
+   		<script src="../js/layui/layui.js"></script>
+    	<script src="../js/plugins/sweetalert/sweetalert.min.js"></script>
+    	<script src="../js/plugins/datapicker/bootstrap-datepicker.js"></script>
+    	<script src="../js/echarts/echarts.common.min.js"></script>
+    	   <script type="text/javascript">
+    	   /*<![CDATA[*/
+  		window.onload=function(){
+  			$.ajax({  
+		       type: "POST",
+		       url: "seeexpress" ,
+		       dataType : 'json',
+		       success: function (result) {
+  		   		var chartone=echarts.init(document.getElementById('chartone'));
+  		   		var array=[];
+  		   		for(var i=0;i<result.name.length;i++){
+  		   			var map={};
+  		   			map.name=result.name[i];
+  		   			map.value=result.jg[i];
+  		   			array[i]=map;
+  		   		}
+  		   		
+  		   		var option = {
+  		   		    title : {
+  		   	        text: '物流日统计记录',
+  		   	        subtext: '纯属虚构',
+  		   	        x:'center'
+  		   	    },
+  		   	    tooltip : {
+  		   	        trigger: 'item',
+  		   	        formatter: "{a} <br/>{b} : {c} ({d}%)"
+  		   	    },
+  		   	    legend: {
+  		   	        orient: 'vertical',
+  		   	        left: 'left',
+  		   	        data: result.name
+  		   	    },
+  		   	    series : [
+  		   	        {
+  		   	            name: '访问来源',
+  		   	            type: 'pie',
+  		   	            radius : '55%',
+  		   	            center: ['50%', '60%'],
+  		   	            data:   array,
+  		   	            itemStyle: {
+  		   	                emphasis: {
+  		   	                    shadowBlur: 10,
+  		   	                    shadowOffsetX: 0,
+  		   	                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+  		   	                }
+  		   	            }
+  		   	        }
+  		   	    ]
+  		   	};
+
+  		   	 chartone.setOption(option); 
+		                      }
+		                  })
+  		   		
+    	   }
+  		/*]]>*/
+	</script>
+</body>
+</html>

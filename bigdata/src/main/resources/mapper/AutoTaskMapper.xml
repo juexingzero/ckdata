@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.AutoTaskService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.AutoTask">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="task_name" jdbcType="VARCHAR" property="taskName" />
+    <result column="task_url" jdbcType="VARCHAR" property="taskUrl" />
+    <result column="channel_id" jdbcType="INTEGER" property="channelId" />
+    <result column="options" jdbcType="VARCHAR" property="options" />
+    <result column="task_time" jdbcType="VARCHAR" property="taskTime" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, task_name, task_url, channel_id, options, task_time, state
+  </sql>
+  
+  <select id="findAllAutoTask" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_auto_task
+  	where state = 1
+  </select>
+  
+  <select id="findAutoTaskByTaskName" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_auto_task
+  	where state = 1 and task_name = #{0}
+  </select>
+  
+  <select id="findAutoTaskByTaskId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include> from bg_auto_task
+  	where state = 1 and id = #{0}
+  </select>
+  
+  <insert id="saveAutoTask" parameterType="com.manhui.model.AutoTask">
+  	insert into bg_auto_task
+  	<trim prefix="(" suffix=")" suffixOverrides=",">
+  	<if test="id != null">
+        id,
+      </if>
+      <if test="taskName != null">
+        task_name,
+      </if>
+      <if test="taskUrl != null">
+        task_url,
+      </if>
+      <if test="channelId != null">
+        channel_id,
+      </if>
+      <if test="options != null">
+        options,
+      </if>
+      <if test="taskTime != null">
+        task_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim> 
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+     <if test="taskName != null">
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskUrl != null">
+       #{taskUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null">
+       #{channelId,jdbcType=INTEGER},
+      </if>
+      <if test="options != null">
+       #{options,jdbcType=VARCHAR},
+      </if>
+      <if test="taskTime != null">
+       #{taskTime,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+       #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateAutoTask" parameterType="com.manhui.model.AutoTask">
+  	update bg_auto_task
+  	<set>
+      <if test="taskName != null">
+        task_name = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskUrl != null">
+        task_url = #{taskUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null">
+        channel_id = #{channelId,jdbcType=INTEGER},
+      </if>
+      <if test="options != null">
+        options = #{options,jdbcType=VARCHAR},
+      </if>
+      <if test="taskTime != null">
+        task_time = #{taskTime,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <delete id="deleteAutoTask" parameterType="java.lang.Integer">
+  	delete from bg_auto_task where id = #{id,jdbcType=INTEGER}
+  </delete>
+</mapper>

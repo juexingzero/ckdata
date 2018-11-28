@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>viewCompany</title>
+    <!-- css库 -->
+    <link href="../cssAndJs/libs/bootstrap.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+    <!-- 自定义公共CSS文件 -->
+    <link rel="stylesheet" href="../css/company/base.css"/>
+    <link rel="stylesheet" href="../css/company/custom_form.css"/>
+
+    <link rel="stylesheet" href="../css/company/view_company.css"/>
+    <style>
+      .wrap{
+  	 	 border: solid 1px #e1e1e1;
+  	 	 padding-bottom:270px;
+	  }
+    </style>
+</head>
+<body class="alert_style">
+    <div class="style_wrap" id="scroll_wrap">
+        <div class="see_details_alert wrap">
+        <div class="company_info">站点详细信息</div>
+            <div class="c_title">
+                    <span class="c_title_item mr_390">站点名称: <span class="" th:text="${vSite.name}"></span></span>
+                </div>
+            <div class="c_title">
+                    <span class="c_title_item mr_390">所属公司: <span class="" th:text="${vSite.cName}"></span></span>
+                </div>
+            <div class="c_title">
+                    <span class="c_title_item mr_390">联系方式: <span class="" th:text="${vSite.phone}"></span></span>
+                </div>
+            <div class="c_title">
+                    <span class="c_title_item mr_390">站点地址:
+                     <span class="" th:text="${vSite.city}"></span>
+                     <span th:text="${vSite.district}"></span>
+                     <span th:text="${vSite.address}"></span>
+                     </span>
+                </div>
+            <div class="c_title">
+                    <span class="c_title_item mr_390">站点图片: </span>
+                    <img alt="" src=""/>
+                </div>
+        </div>
+    </div>
+    <!-- js -->
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/company/layui.js"></script>
+    <script type="text/javascript" src="../js/company/jquery.nicescroll.js"></script>
+    <script type="text/javascript">
+    </script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.ShopService">
+	<resultMap type="com.manhui.model.Shop" id="BaseResultMap">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="shop_nid" jdbcType="VARCHAR" property="shopNid" />
+		<result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
+		<result column="phone" jdbcType="VARCHAR" property="phone" />
+		<result column="channel_id" jdbcType="INTEGER" property="channelId" />
+		<result column="region_id" jdbcType="INTEGER" property="regionId" />
+		<result column="province" jdbcType="VARCHAR" property="province" />
+		<result column="city" jdbcType="VARCHAR" property="city" />
+		<result column="district" jdbcType="VARCHAR" property="district" />
+		<result column="address" jdbcType="VARCHAR" property="address" />
+		<result column="company_id" jdbcType="INTEGER" property="companyId" />
+		<result column="business_ids" jdbcType="VARCHAR" property="businessIds" />
+		<result column="state" jdbcType="INTEGER" property="state" />
+		<result column="url" jdbcType="VARCHAR" property="url" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,name,shop_nid,img_url,phone,channel_id,region_id,province,city,district,address,company_id,business_ids,state,url
+	</sql>
+
+	<select id="findShopCount" resultType="java.lang.Integer">
+		select count(id) from
+		bg_shop
+		where state = 1
+	</select>
+
+	<select id="findShopPage" parameterType="com.manhui.model.Shop"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"></include>
+		from bg_shop
+		where state = 1 order by id limit #{start},#{end}
+	</select>
+
+	<select id="findShopList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"></include>
+		from bg_shop s where
+		s.state = 1 order by id
+	</select>
+
+	<select id="getShopList" parameterType="com.manhui.model.Shop"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"></include>
+		from bg_shop s where
+		s.state = 1
+		<if test="name != null">
+			AND
+			s.name like #{arg0}
+		</if>
+	</select>
+	<select id="getShopListPage" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"></include>
+		from bg_shop s where
+		s.state = 1
+			AND
+			s.name like #{arg0}
+		limit #{arg1},10
+	</select>
+	<select id="getPageShop" parameterType="com.manhui.util.PageBean"
+		resultType="java.util.Map">
+		select s.*,c.name as cName
+		from bg_shop s
+		left join bg_company c
+		on
+		s.company_id = c.id
+		where
+		s.state = 1 ORDER BY
+		s.id
+		<if test="pageBean != null">
+			LIMIT #{pageBean.startIndex},#{pageBean.pageSize}
+		</if>
+	</select>
+	<select id="selectById" parameterType="com.manhui.model.Shop"
+		resultType="java.util.Map">
+		select
+		s.*,
+		c.name as cName
+		from bg_shop s
+		LEFT JOIN bg_company c
+		ON
+		s.company_id = c.id
+		where
+		s.state = 1
+		<if test="id != null">
+			AND
+			s.id = #{id}
+		</if>
+	</select>
+	<insert id="insertShop" parameterType="com.manhui.model.Shop">
+		<selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into bg_shop
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="shopNid != null">
+				shop_nid,
+			</if>
+			<if test="imgUrl != null">
+				img_url,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="channelId != null">
+				channel_id,
+			</if>
+			<if test="regionId != null">
+				region_id,
+			</if>
+			<if test="province != null">
+				province,
+			</if>
+			<if test="city != null">
+				city,
+			</if>
+			<if test="district != null">
+				district,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="companyId != null">
+				company_id,
+			</if>
+			<if test="businessIds != null">
+				business_ids,
+			</if>
+			<if test="state != null">
+				state,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+			update_time
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="shopNid != null">
+				#{shopNid,jdbcType=VARCHAR},
+			</if>
+			<if test="imgUrl != null">
+				#{imgUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="channelId != null">
+				#{channelId,jdbcType=INTEGER},
+			</if>
+			<if test="regionId != null">
+				#{regionId,jdbcType=INTEGER},
+			</if>
+			<if test="province != null">
+				#{province,jdbcType=VARCHAR},
+			</if>
+			<if test="city != null">
+				#{city,jdbcType=VARCHAR},
+			</if>
+			<if test="district != null">
+				#{district,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="companyId != null">
+				#{companyId,jdbcType=INTEGER},
+			</if>
+			<if test="businessIds != null">
+				#{businessIds,jdbcType=VARCHAR},
+			</if>
+			<if test="state != null">
+				#{state,jdbcType=INTEGER},
+			</if>
+			<if test="url != null">
+				#{url,jdbcType=VARCHAR},
+			</if>
+			now()
+		</trim>
+	</insert>
+	<update id="updateShop" parameterType="com.manhui.model.Shop">
+		update bg_shop
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="imgUrl != null">
+				img_url = #{imgUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="channelId != null">
+				channel_id = #{channelId,jdbcType=INTEGER},
+			</if>
+			<if test="regionId != null">
+				region_id = #{regionId,jdbcType=INTEGER},
+			</if>
+			<if test="province != null">
+				province = #{province,jdbcType=VARCHAR},
+			</if>
+			<if test="city != null">
+				city = #{city,jdbcType=VARCHAR},
+			</if>
+			<if test="district != null">
+				district = #{district,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="companyId != null">
+				company_id = #{companyId,jdbcType=INTEGER},
+			</if>
+			<if test="businessIds != null">
+				business_ids = #{businessIds,jdbcType=VARCHAR},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=INTEGER},
+			</if>
+			<if test="url != null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			update_time=now()
+		</set>
+		<where>
+			<choose>
+				<when test="shopNid != null">
+					shop_nid = #{shopNid,jdbcType=VARCHAR}
+				</when>
+				<otherwise>
+					id = #{id,jdbcType=INTEGER}
+				</otherwise>
+			</choose>
+		</where>
+	</update>
+	<update id="deleteShop" parameterType="com.manhui.model.Shop">
+		update bg_shop s
+		set
+		s.state = 0
+		where s.id = #{id,jdbcType=INTEGER}
+	</update>
+	<select id="findNameById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"></include>
+		from bg_shop
+		where id = #{id}
+	</select>
+	<select id="getShopCount" resultType="java.lang.Integer">
+		select count(id) from
+		bg_shop where state = 1
+	</select>
+	<select id="getShopCountById" parameterType="string" resultType="integer">
+		select id from bg_shop where shop_nid=#{id}
+	</select>
+
+	<select id="getShopUrlList" resultMap="BaseResultMap"
+		parameterType="integer">
+		select
+		<include refid="Base_Column_List" />
+		from bg_shop where url is not null and channel_id=#{id}
+		order by
+		update_time
+	</select>
+    <select id="getShopByCompanyId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    	select <include refid="Base_Column_List" /> from bg_shop
+    	where company_id = #{companyId,jdbcType=INTEGER}
+    </select>
+
+	<select id="getshopByid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> from bg_shop
+    	where id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="findAllShop" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"></include>
+		from bg_shop s where
+		s.state = 1
+			AND
+			s.name like #{arg0}
+		limit #{arg1},10
+	</select>
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.DayAllLogService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.DayAllLog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="data" jdbcType="VARCHAR" property="data" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, add_time, data
+  </sql>
+  <select id="findDayAllLogByDate" parameterType="java.util.Date" resultMap="BaseResultMap">
+  	select * from bg_day_all_log where DATE_FORMAT(add_time, '%Y-%m-%d') = #{addTime,jdbcType=DATE} order by add_time desc
+  	limit 0,1
+  </select>
+  
+  <select id="findDayAllLogHistory" resultMap="BaseResultMap">
+  	select * from bg_day_all_log order by add_time desc
+  	limit 0,1
+  </select>
+  
+  <insert id="saveDayAllLog" parameterType="com.manhui.model.DayAllLog">
+  	insert into bg_day_all_log 
+  	<trim prefix="(" suffix=")" suffixOverrides=",">
+  	<if test="id != null">
+        id,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="data != null">
+        data,
+      </if>
+    </trim> 
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+     <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="data != null">
+       #{data,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateDayAllLog" parameterType="com.manhui.model.DayAllLog">
+  	update bg_day_all_log
+  	<set>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="data != null">
+        data = #{data,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

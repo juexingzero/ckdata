@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>editCompany</title>
+    <!-- css库 -->
+    <link href="../cssAndJs/libs/bootstrap.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../cssAndJs/libs/layui/css/layui.css"/>
+    <!-- 自定义公共CSS文件 -->
+    <link rel="stylesheet" href="../css/company/base.css"/>
+    <link rel="stylesheet" href="../css/company/custom_form.css"/>
+
+    <link rel="stylesheet" href="../css/company/view_company.css"/>
+    <style>
+       .companyInfo {
+          position: relative;
+          width:200px;
+       }
+       #com_form {
+          height:100%;
+       }
+       .formBot {
+          position: relative;
+          text-align: center;
+          margin-top: 0px;
+       }
+       .imgUrl {
+          width:300px;
+          height:200px;
+       }
+       .wrap{
+  	 	 border: solid 1px #e1e1e1;
+  	 	 padding-bottom:300px;
+	  }
+	  .select-control {
+	     width:200px;
+	     height:34px;
+	     font-size:14px;
+	     border: solid 1px #e3e2e7;
+	     border-radius: 4px;
+         background-color: #fff;
+   		 color: #252626;
+	  }
+    </style>
+</head>
+<body class="alert_style">
+  <form id="com_form" action="saveArticle" method="post">
+    <div class="style_wrap" id="scroll_wrap">
+        <div class="see_details_alert wrap">
+        <div class="company_info">新增商品信息</div>
+            <span style="color:red;font-size:10px;margin-left:10px">提示：* 为必填项！</span>
+            <div class="c_title" style="margin-top:10px">
+                    <span class="" style="font-size:15px;padding-left:10px"><span style="color:red">*</span>商品名称: 
+                    <input type="text" id="title" name="title" class="layui-input companyInfo"/>
+                    <span id = "tip1" style="color: red; margin-left: 10px;"></span>
+                    </span>
+                    <span class="" style="font-size:15px;padding-left:10px"><span style="color:red">*</span>商品连接: 
+                    <input type="text" id="url" name="url" class="layui-input companyInfo"/>
+                    <span id = "tip1" style="color: red; margin-left: 10px;"></span>
+                    </span>
+                    <span class="" style="font-size:15px;padding-left:10px"><span style="color:red">*</span>商品价格: 
+                    <input type="text" id="price" name="price" class="layui-input companyInfo"/>&nbsp;元
+                    <span id = "tip3" style="color: red; margin-left: 10px;"></span>
+                    </span>
+                    <span class="" style="font-size:15px;padding-left:10px"><span style="color:red">*</span>商品数量: 
+                    <input type="text" id="quantity" name="quantity" class="layui-input companyInfo"/>&nbsp;个
+                    <span id = "tip3" style="color: red; margin-left: 10px;"></span>
+                    </span>                </div>
+            <div class="c_title">
+            		<span class="" style="font-size:15px;padding-left:10px"><span style="color:red">*</span>所属店铺:
+            		<select name="shopId" class="select-control">
+						<option value="0">全部</option>
+						<option th:each="listShop : ${listShop}" th:value="${listShop.id}" th:text="${listShop.name}"></option>
+					</select> 
+                    <span id = "tip4" style="color: red; margin-left: 10px;"></span>
+                    </span>
+                    <span class="" style="font-size:15px;padding-left:10px"><span style="color:red">*</span>所属类目: 
+                    <select name="categoryId" class="select-control" id="categoryId">
+						<option value="0"></option>
+						<option th:each="listCate : ${listCate}" th:value="${listCate.id}" th:text="${listCate.name}"></option>
+					</select>
+                    <span id = "tip4" style="color: red; margin-left: 10px;"></span>
+                    </span>
+                </div>
+            <div class="c_title">
+                    <span class="c_title_item mr_390">公司图片: </span>
+                    <div class="imgUrl">
+                    	<img name="imgUrl" alt="" src=""/>+
+                    </div>
+                </div>
+        </div>
+	  	<div class="formBot">
+	            <span class="btn_sm_blue8 mr_80" id="saveArticle">保存</span>
+	            <span class="btn_sm_white6" id="cancel">取消</span>
+	    </div>
+    </div>
+  </form>
+    <!-- js -->
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/company/layui.js"></script>
+    <script type="text/javascript" src="../js/company/jquery.nicescroll.js"></script>
+    <script type="text/javascript">
+    /*<![CDATA[*/
+    $(function () {
+        layui.use(['form'], function () {
+            var form = layui.form;
+
+            // 自定义滚动条
+            $("#scroll_wrap").niceScroll({
+                cursorcolor: "#4d98fb",
+                cursorwidth: "10px",
+                cursorborderradius: "0px",
+                autohidemode: false // 默认始终显示
+            });
+
+            
+        })
+        
+      //保存
+        $("#saveArticle").on("click",saveArticle);
+        $("#cancel").on("click",cancel);
+
+    });
+    //动态获取行业所对应的类目
+    /* function getCategory() {
+    	//alert(this.value);
+    	var pid = this.value;
+    	$.ajax({
+    		url:"/getCategory",
+    		type:"post",
+    		data:"id="+pid,
+    		success:function(data){
+    			//console.log(data);
+    			if(data.length != 0){
+    				$("#categoryId").empty();
+    				for(var i=0;i<data.length;i++){
+    					var html = '<option value="'+data[i].id+'">'+data[i].name+'</option>';
+    					$("#categoryId").append($(html));
+    				}
+    			}
+    		}
+    	});
+    } */
+    
+    function saveArticle(){
+		//alert();
+    	/* var id = $('#id').val();
+    	var name = $('#name').val();
+    	var legalPerson = $('#legalPerson').val();
+    	var legalPersonPhone = $('#legalPersonPhone').val();
+    	var city = $('#city').val();
+    	var district = $('#district').val();
+    	var address = $('#address').val();
+    	var flag = true;
+    	if(name == null){
+    		$('#tip1').append("请输入公司名称！");
+    		flag = false;
+    		return flag;
+    	}else{$('#tip1').empty();}
+    	if(legalPerson == null){
+    		$('#tip2').append("请输入法人代表！");
+    		flag = false;
+    		return flag;
+    	}else{$('#tip2').empty();}
+    	if(legalPersonPhone == null){
+    		$('#tip3').append("请输入联系方式！");
+    		flag = false;
+    		return flag;
+    	}else{$('#tip3').empty();}
+    	if(city == null || district == null || address == null){
+    		$('#tip1').append("请输入详细地址！");
+    		flag = false;
+    		return flag;
+    	}else{$('#tip4').empty();} */
+    	
+        $('#com_form').submit();
+        // 将表单复制到父画面，在父页面的回调函数里提交表单
+		var popupFormDiv = $(parent.document.body).children("div[id='popupFormDiv']").append($("#com_form"));
+		var index = parent.layer.getFrameIndex(window.name); 
+        parent.layer.close(index);
+    }
+    function cancel(){
+        closeAlert();
+    }
+
+    // 关闭当前弹框
+    function closeAlert() {
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    }
+    /*]]>*/
+    </script>
+</body>
+</html>

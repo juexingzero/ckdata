@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.service.DataHistoryService" >
+	<resultMap type="com.manhui.model.DataHistory" id="BaseResultMap">
+     <id column="id" jdbcType="INTEGER" property="id" />
+     <result column="start_time" jdbcType="VARCHAR" property="startTime"/>
+     <result column="end_time" jdbcType="VARCHAR" property="endTime"/>
+     <result column="data_count" jdbcType="INTEGER" property="dataCount"/>
+     <result column="channel_id" jdbcType="INTEGER" property="channelId"/>
+     <result column="state" jdbcType="INTEGER" property="state"/>
+  	</resultMap>
+	
+	<insert id="insertHistory" parameterType="com.manhui.model.DataHistory" >
+	  <selectKey resultType="int" order="AFTER" keyProperty="id">
+          SELECT LAST_INSERT_ID()
+      </selectKey>
+		insert into bg_day_data_history(start_time,end_time,data_count,channel_id,state)
+		values(now(),#{endTime},#{dataCount},#{channelId},1)
+	</insert>
+	
+	<update id="updateHistory" parameterType="com.manhui.model.DataHistory">
+		update bg_day_data_history 
+		set end_time=now(),
+			data_count=#{dataCount},
+			state=2
+		where id=#{id}
+	</update>
+	
+	<select id="getHistory" resultMap="BaseResultMap">
+		select id,start_time,end_time,data_count,channel_id,state
+		from bg_day_data_history 
+		order by start_time desc
+	</select>
+</mapper>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manhui.service.DayChannelLogService" >
+  <resultMap id="BaseResultMap" type="com.manhui.model.DayChannelLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="channel_id" property="channelId" jdbcType="INTEGER" />
+    <result column="shop_num" property="shopNum" jdbcType="INTEGER" />
+    <result column="article_num" property="articleNum" jdbcType="INTEGER" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="deal_article_num" property="dealArticleNum" jdbcType="INTEGER" />
+    <result column="deal_shop_num" property="dealShopNum" jdbcType="INTEGER" />
+    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="per_amount" property="perAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <resultMap id="BaseResult" type="com.manhui.model.DayChannelLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="channel_id" property="channelId" jdbcType="INTEGER" />
+    <result column="shop_num" property="shopNum" jdbcType="INTEGER" />
+    <result column="article_num" property="articleNum" jdbcType="INTEGER" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="deal_article_num" property="dealArticleNum" jdbcType="INTEGER" />
+    <result column="deal_shop_num" property="dealShopNum" jdbcType="INTEGER" />
+    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="per_amount" property="perAmount" jdbcType="DECIMAL" />
+    <association property="channel" javaType="com.manhui.model.Channel">
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, add_time, channel_id, shop_num, article_num, order_num, deal_article_num, deal_shop_num, 
+    total_amount, per_amount
+  </sql>
+  
+  <select id="findDayCL" parameterType="java.lang.String" resultMap="BaseResult">
+  	select a.*,b.name from bg_day_channel_log a,bg_channel b 
+  	where a.channel_id=b.id and a.add_time like #{0}
+  </select>
+  
+  <select id="findAllDayChannelLog" resultMap="BaseResultMap">
+  select SUM(total_amount) as total_amount,SUM(shop_num) as shop_num from bg_day_channel_log
+  </select>
+  
+  <select id="findDayChannelLog" resultMap="BaseResult">
+  	select sum(a.total_amount) as total_amount ,b.name from bg_day_channel_log a 
+  	INNER JOIN bg_channel b on a.channel_id=b.id GROUP BY a.channel_id
+  </select>
+  
+  <select id="findDayCh" resultMap="BaseResult">
+  	select sum(a.shop_num) as shop_num,b.name from bg_day_channel_log a 
+	INNER JOIN bg_channel b on a.channel_id=b.id GROUP BY b.id
+  </select>
+  
+  <insert id="insertDayChannelLog" parameterType="com.manhui.model.DayChannelLog">
+  	insert into bg_day_channel_log 
+  	<trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="channelId != null">
+        channel_id,
+      </if>
+      <if test="shopNum != null">
+        shop_num,
+      </if>
+      <if test="articleNum != null">
+        article_num,
+      </if>
+       <if test="orderNum != null">
+        order_num,
+      </if>
+       <if test="dealArticleNum != null">
+        deal_article_num,
+      </if>
+       <if test="dealShopNum != null">
+        deal_shop_num,
+      </if>
+       <if test="totalAmount != null">
+        total_amount,
+      </if>
+       <if test="perAmount != null">
+        per_amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+     <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="channelId != null">
+       #{channelId,jdbcType=INTEGER},
+      </if>
+      <if test="shopNum != null">
+       #{shopNum,jdbcType=INTEGER},
+      </if>
+      <if test="articleNum != null">
+       #{articleNum,jdbcType=INTEGER},
+      </if>
+       <if test="orderNum != null">
+       #{orderNum,jdbcType=INTEGER},
+      </if>
+       <if test="dealArticleNum != null">
+       #{dealArticleNum,jdbcType=INTEGER},
+      </if>
+       <if test="dealShopNum != null">
+       #{dealShopNum,jdbcType=INTEGER},
+      </if>
+       <if test="totalAmount != null">
+       #{totalAmount,jdbcType=DECIMAL},
+      </if>
+       <if test="perAmount != null">
+       #{perAmount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+</mapper>

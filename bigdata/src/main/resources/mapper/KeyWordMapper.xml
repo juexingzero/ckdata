@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manhui.service.KeyWordService">
+  <resultMap id="BaseResultMap" type="com.manhui.model.KeyWord">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="kay_word" jdbcType="VARCHAR" property="kayWord" />
+    <result column="shop_id" jdbcType="INTEGER" property="shopId" />
+    <result column="article_id" jdbcType="INTEGER" property="articleId" />
+    <result column="search_num" jdbcType="INTEGER" property="searchNum" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, kay_word, shop_id, article_id, search_num, add_time
+  </sql>
+  
+  <select id="findKeyWord" resultMap="BaseResultMap">
+  	select kay_word from bg_key_word
+  </select>
+  
+</mapper>
